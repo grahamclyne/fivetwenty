@@ -7,7 +7,7 @@ EXP *makeEXP_identifier(char *identifier)
 	EXP *e = malloc(sizeof(EXP));
 	e->lineno = yylineno;
 	e->kind = k_expressionKindIdentifier;
-	e->val.identifier = identifier;
+	e->val.stringLiteral = identifier;
 	return e;
 }
 

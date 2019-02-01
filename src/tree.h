@@ -1,3 +1,6 @@
+#ifndef TREE_H
+#define TREE_H
+
 
 typedef enum
 {
@@ -28,6 +31,7 @@ typedef enum
 typedef struct EXP EXP;
 struct EXP
 {
+      int lineno;
     ExpressionKind kind;
     union {
         char *id;
@@ -64,15 +68,26 @@ struct STATEMENT
     STATEMENT *next;
 };
 
+
+EXP *makeEXP_assign(EXP *type, EXP *exp);
 EXP *makeEXP_identifier(char *id);
 EXP *makeEXP_stringLiteral(char *stringLiteral);
 EXP *makeEXP_floatLiteral(float floatLiteral);
 EXP *makeEXP_intLiteral(int intLiteral);
 EXP *makeEXP_booleanLiteral(bool boolLiteral);
 EXP *makeEXP_binary(ExpressionKind op, EXP *lhs, EXP *rhs);
-STATEMENT *makeSTATEMENT_assign(char *id, EXP *value);
+STATEMENT *makeSTATEMENT_assign(EXP *type, char *id, EXP *value);
 STATEMENT *makeSTATEMENT_while(EXP *condition, STATEMENT *body);
 STATEMENT *makeSTATEMENT_print(EXP *exp);
 STATEMENT *makeSTATEMENT_read(char *id);
 STATEMENT *makeSTATEMENT_if(EXP *exp, STATEMENT *statements);
 STATEMENT *makeSTATEMENT_ifelse(EXP *exp, STATEMENT *statements, STATEMENT *elsestatements);
+STATEMENT *makeSTATEMENT_elseif(EXP *exp, STATEMENT *statements);
+EXP *makeEXP_decl(char *id, EXP *type);
+EXP *makeTYPEbool();
+EXP *makeTYPEint();
+EXP *makeTYPEfloat();
+EXP *makeTYPEstring();
+
+
+#endif

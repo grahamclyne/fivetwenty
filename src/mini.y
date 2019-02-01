@@ -1,8 +1,8 @@
 %{
-#include "tree.h"
+
 #include <stdio.h>
 #include <stdlib.h>
-
+#include "tree.h" 
 extern int yylineno;
 extern int g_tokens;
 extern char *yytext;
@@ -24,19 +24,21 @@ int yylex();
 	float float_val;
 	char charconst;
 	EXP *exp;
+	bool bool_val;
 	STATEMENT *statement;
 }
 
-%type <exp> program exp tTRUE tFALSE type tBOOLEAN tINT tBOOLEAN tFLOAT tSTRING
+%type <exp> program exp type
 
 %type <statement> statements statement assignment ifstatement elseifstatement comment
-%token	tVAR tWHILE tTRUE tFALSE tFLOAT tREAD tELSE 
+%token	tVAR tWHILE tFLOAT tREAD tELSE 
 		tBOOLEAN tINT tIF tPRINT tCHARCONST 
 		tSTRING tCOMMENT tEQ tLEQ tGEQ tNEQ tAND tOR
 %token <int_val> tINTVAL
 %token <string_val> tIDENTIFIER
 %token <float_val> tFLOATVAL
 %token <string_val> tSTRINGVAL
+%token <bool_val> tTRUE tFALSE
 
 
 %left tOR
@@ -70,32 +72,32 @@ ifstatement : tIF '(' exp ')'  '{' statements '}' { $$ = makeSTATEMENT_if($3, $6
 	| tIF '(' exp ')'  '{' statements '}'  tELSE '{' statements '}' { $$ = makeSTATEMENT_ifelse($3, $6, $10); }
 	;
 
-elseifstatement : tELSE tIF '(' exp ')'  '{' statements '}'  elseifstatement { $$ = makeSTATEMENT_elseif($3, $6); }
-	| tELSE tIF '(' exp ')'  '{' statements '}' { $$ = makeSTATEMENT_if($3, $6); }
-	| tELSE tIF '(' exp ')'  '{' statements '}'  tELSE '{' statements '}' { $$ = makeSTATEMENT_if($3, $6); }
+elseifstatement : tELSE tIF '(' exp ')'  '{' statements '}'  elseifstatement { $$ = makeSTATEMENT_elseif($4, $7); }
+	| tELSE tIF '(' exp ')'  '{' statements '}' { $$ = makeSTATEMENT_if($4, $7); }
+	| tELSE tIF '(' exp ')'  '{' statements '}'  tELSE '{' statements '}' { $$ = makeSTATEMENT_if($4, $7); }
 	;
 
-assignment : tVAR tIDENTIFIER ':' type '=' exp ';' { $$ = makeSTATEMENT_assign($3, $6); }
-	| tIDENTIFIER '=' exp ';' { $$ = makeSTATEMENT_assign($3, $6); }
-	| tVAR tIDENTIFIER ':' type ';' { $$ = makeSTATEMENT_assign($3, $6); }
+assignment : tVAR tIDENTIFIER ':' type '=' exp ';' { $$ = makeSTATEMENT_assign($2, $4, $6); }
+	| tIDENTIFIER '=' exp ';' { $$ = makeEXP_assign($1, $3); }
+	| tVAR tIDENTIFIER ':' type ';' { $$ = makeSTATEMENT_decl($2, $4); }
 	;
 
 comment : tCOMMENT tIDENTIFIER comment { $$ = NULL; }
 	| tIDENTIFIER { $$ = NULL; }
 	;
 
-type : tBOOLEAN { $$ = $1; }
-	| tINT  { $$ = $1; }
-	| tFLOAT  { $$ = $1; }
-	| tSTRING  { $$ = $1; }
+type : tBOOLEAN { $$ =	makeTYPEbool(); }
+	| tINT  { $$ = makeTYPEint(); }
+	| tFLOAT  { $$ = makeTYPEfloat(); }
+	| tSTRING  { $$ = makeTYPEstring(); }
 	;
 
 exp : tIDENTIFIER { $$ = makeEXP_identifier($1); }
  	| tINTVAL { $$ = makeEXP_intLiteral($1); }
  	| tFLOATVAL { $$ = makeEXP_floatLiteral($1); }
-	| tTRUE { $$ = makeEXP_boolLiteral($1); }
+	| tTRUE { $$ = makeEXP_booleanLiteral($1); }
 	| tSTRINGVAL { $$ = makeEXP_stringLiteral($1); }
-	| tFALSE  { $$ = makeEXP_boolLiteral($1); }
+	| tFALSE  { $$ = makeEXP_booleanLiteral($1); }
 	| exp '+' exp { $$ = makeEXP_binary(k_expressionKindAddition, $1, $3); }
 	| exp '*' exp { $$ = makeEXP_binary(k_expressionKindMultiplication, $1, $3); }
 	| exp '-' exp { $$ = makeEXP_binary(k_expressionKindSubtraction, $1, $3); }

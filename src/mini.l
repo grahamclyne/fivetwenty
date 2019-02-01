@@ -17,8 +17,8 @@ void yyerror();
 var		{ if (g_tokens) printf("tVAR\n"); return  tVAR;}
 string	{ if (g_tokens) printf("tSTRING\n"); return  tSTRING;}
 while	{ if (g_tokens) printf("tWHILE\n"); return  tWHILE;}
-true	{ if (g_tokens) printf("tTRUE \n"); return  tTRUE;}
-false	{ if (g_tokens) printf("tFALSE \n"); return  tFALSE;}
+true	{ if (g_tokens) printf("tTRUE \n"); yylval.bool_val = true; return  tTRUE;}
+false	{ if (g_tokens) printf("tFALSE \n"); yylval.bool_val = false; return  tFALSE;}
 float	{ if (g_tokens) printf("tFLOAT \n"); return  tFLOAT;}
 boolean	{ if (g_tokens) printf("tBOOLEAN \n"); return  tBOOLEAN;}
 read	{ if (g_tokens) printf("tREAD \n"); return  tREAD;}
