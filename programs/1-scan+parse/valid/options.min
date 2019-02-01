@@ -1,0 +1,32 @@
+var age: int = 10;
+var name: string = "Buddy";
+var interests: string = "Picking up Garbage";
+if(age < 10) {
+    print("youre less than 10 years old");
+}
+else if(age == 10) {
+    print("youre ten years old");
+}
+else if (age > 10) {
+    print("you are greater than 10.");
+    var found: string = "";
+    var x: boolean = true;
+    while(x) {
+        var lookup: string = "Pretend to search some DB";
+        if(lookup == interests){
+            x = false;
+        }
+    }
+    if(name == "Buddy") {
+        print("no job for you");
+    }
+    else if(name == "Roger") {
+        print("Hey Roger");
+    }
+    else if(name == "Honey" && interests == "Trucker") {
+        
+    }
+    else{
+        print(interests);
+    }
+}

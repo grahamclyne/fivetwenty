@@ -1,0 +1,37 @@
+// this program computes the sin taylor series
+
+var temp: int = 0;
+var n: int = 1;
+var sin: float = 0.0;
+
+while(n < 1000) {
+
+    //computing power (-1)^(n-1)
+    var x: int = -1;
+    while(temp < (n-1)){
+        x = x * temp;
+    }
+    num = num + 1;
+    temp = 0;
+
+    //computing factorial
+    var fact: int = (2 * n) - 1;
+    var facttot: int = 1;
+    while(fact > 0) {
+        facttot = facttot * fact;
+        fact = fact - 1;
+    }
+
+    //computing x^(2n - 1)
+    var variable: int = input;
+    temp = (2 * n) - 1;
+    while(temp > 0) {
+        variable = variable * variable;
+        temp = temp - 1;
+    }
+
+    //putting it together
+    sin = (x * variable ) / facttot;
+}
+
+print("the value returned is " + sin);

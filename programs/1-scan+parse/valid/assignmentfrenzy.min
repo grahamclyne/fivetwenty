@@ -1,0 +1,23 @@
+var a: boolean = 4 < 5;
+var b: boolean = a == b;
+var c: float = 10.0 + 4;
+var d: float = 4.0 / 5.0;
+var e: int = b;
+var f: int = 45 * 43 + b + 43;
+var g: string = "asda";
+var h: int;
+var i: float;
+var j: string;
+var k: float = 1.203;
+var l: int = (((("bummer, dude"))));
+var m: float; 
+var n: string;
+var o: string = "honey" + "dripper";
+
+o =  a + b - c * d / e + (f * g - h * (i / j) + k) || l * m + n / o;
+print(o);
+var s: string = "derp\"derp";
+while (x) {
+    print(x);
+}
+// heyo
