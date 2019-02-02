@@ -12,13 +12,6 @@ int main(int argc, char *argv[])
     {
         g_tokens = 1;
         while(yylex()) {}
-       /* int x = yylex();
-        while(x != 0) {
-            //char token[20] = ;
-          //  sprintf(token, "%d", yylex());
-            printf("%d %s\n", x, yytext);
-            x = yylex();
-        };*/
         return 0;
     }
     else if (strcmp("scan", argv[1]) == 0) {

@@ -1,7 +1,6 @@
 #ifndef TREE_H
 #define TREE_H
 
-
 typedef enum
 {
     k_expressionKindIdentifier,
@@ -13,32 +12,37 @@ typedef enum
     k_expressionKindMultiplication,
     k_expressionKindDivision,
     k_expressionKindEquality,
-    k_expressionKindGreaterThan, 
+    k_expressionKindGreaterThan,
     k_expressionKindLessThan
 } ExpressionKind;
 
 typedef enum
 {
-    k_statementKindAssignment, 
-    k_statementKindWhile,
-    k_statementKindPrint,
-    k_statementKindRead, 
-    k_statementKindIf,
-    k_statementKindIfElse
-} StatementKind;
+    k_typeInt,
+    k_typeBool,
+    k_typeString,
+    k_typeIdentifier,
+    k_typeFloat
+} TypeKind;
 
+typedef struct TYPE TYPE;
+struct TYPE
+{
+    int lineno;
+    TypeKind kind;
+};
 
 typedef struct EXP EXP;
 struct EXP
 {
-      int lineno;
+    int lineno;
     ExpressionKind kind;
     union {
         char *id;
         int intLiteral;
         float floatLiteral;
         char *stringLiteral;
-        bool boolLiteral;
+        int boolLiteral;
         struct
         {
             EXP *lhs;
@@ -50,44 +54,63 @@ struct EXP
 typedef struct STATEMENT STATEMENT;
 struct STATEMENT
 {
-    StatementKind kind;
     int lineno;
     union {
         struct
         {
             char *id;
-            EXP *value;
+            EXP *exp;
         } assignment;
-
         struct
         {
             EXP *condition;
             STATEMENT *body;
         } loop;
+        struct
+        {
+            EXP *condition;
+            STATEMENT *body;
+        } ifstatement;
+        struct
+        {
+            char *id;
+            TYPE *type;
+        } decl;
+        struct
+        {
+            char *id;
+            TYPE *type;
+            EXP *exp;
+        } declassign;
+        struct
+        {
+            char *id;
+        } read;
+        struct
+        {
+            EXP *exp;
+        } print;
     } val;
     STATEMENT *next;
 };
 
-
-EXP *makeEXP_assign(EXP *type, EXP *exp);
 EXP *makeEXP_identifier(char *id);
 EXP *makeEXP_stringLiteral(char *stringLiteral);
 EXP *makeEXP_floatLiteral(float floatLiteral);
 EXP *makeEXP_intLiteral(int intLiteral);
-EXP *makeEXP_booleanLiteral(bool boolLiteral);
+EXP *makeEXP_booleanLiteral(int boolLiteral);
 EXP *makeEXP_binary(ExpressionKind op, EXP *lhs, EXP *rhs);
-STATEMENT *makeSTATEMENT_assign(EXP *type, char *id, EXP *value);
-STATEMENT *makeSTATEMENT_while(EXP *condition, STATEMENT *body);
+STATEMENT *makeSTATEMENT_if(EXP *condition, STATEMENT *body);
+STATEMENT *makeSTATEMENT_while(EXP *condigition, STATEMENT *body);
+STATEMENT *makeSTATEMENT_assign(char *id, EXP *exp);
+STATEMENT *makeSTATEMENT_decl(char *id, TYPE *type);
+STATEMENT *makeSTATEMENT_declassign(char *id, TYPE *type, EXP *value);
 STATEMENT *makeSTATEMENT_print(EXP *exp);
 STATEMENT *makeSTATEMENT_read(char *id);
-STATEMENT *makeSTATEMENT_if(EXP *exp, STATEMENT *statements);
 STATEMENT *makeSTATEMENT_ifelse(EXP *exp, STATEMENT *statements, STATEMENT *elsestatements);
-STATEMENT *makeSTATEMENT_elseif(EXP *exp, STATEMENT *statements);
-EXP *makeEXP_decl(char *id, EXP *type);
-EXP *makeTYPEbool();
-EXP *makeTYPEint();
-EXP *makeTYPEfloat();
-EXP *makeTYPEstring();
-
+TYPE *makeTYPEbool();
+TYPE *makeTYPEint();
+TYPE *makeTYPEfloat();
+TYPE *makeTYPEstring();
 
 #endif

@@ -40,7 +40,7 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 16 "mini.y" /* yacc.c:1909  */
+#line 14 "mini.y" /* yacc.c:1909  */
 
 	#include <stdbool.h>
 	#include "tree.h"
@@ -54,72 +54,71 @@ extern int yydebug;
   {
     tVAR = 258,
     tWHILE = 259,
-    tFLOAT = 260,
-    tREAD = 261,
-    tELSE = 262,
-    tBOOLEAN = 263,
-    tINT = 264,
-    tIF = 265,
-    tPRINT = 266,
-    tCHARCONST = 267,
-    tSTRING = 268,
-    tCOMMENT = 269,
-    tEQ = 270,
-    tLEQ = 271,
-    tGEQ = 272,
-    tNEQ = 273,
-    tAND = 274,
-    tOR = 275,
-    tINTVAL = 276,
-    tIDENTIFIER = 277,
-    tFLOATVAL = 278,
-    tSTRINGVAL = 279,
-    tTRUE = 280,
-    tFALSE = 281
+    tREAD = 260,
+    tELSE = 261,
+    tIF = 262,
+    tPRINT = 263,
+    tCOMMENT = 264,
+    tEQ = 265,
+    tLEQ = 266,
+    tGEQ = 267,
+    tNEQ = 268,
+    tAND = 269,
+    tOR = 270,
+    tBOOLEAN = 271,
+    tSTRING = 272,
+    tINT = 273,
+    tFLOAT = 274,
+    tINTVAL = 275,
+    tIDENTIFIER = 276,
+    tFLOATVAL = 277,
+    tSTRINGVAL = 278,
+    tTRUE = 279,
+    tFALSE = 280
   };
 #endif
 /* Tokens.  */
 #define tVAR 258
 #define tWHILE 259
-#define tFLOAT 260
-#define tREAD 261
-#define tELSE 262
-#define tBOOLEAN 263
-#define tINT 264
-#define tIF 265
-#define tPRINT 266
-#define tCHARCONST 267
-#define tSTRING 268
-#define tCOMMENT 269
-#define tEQ 270
-#define tLEQ 271
-#define tGEQ 272
-#define tNEQ 273
-#define tAND 274
-#define tOR 275
-#define tINTVAL 276
-#define tIDENTIFIER 277
-#define tFLOATVAL 278
-#define tSTRINGVAL 279
-#define tTRUE 280
-#define tFALSE 281
+#define tREAD 260
+#define tELSE 261
+#define tIF 262
+#define tPRINT 263
+#define tCOMMENT 264
+#define tEQ 265
+#define tLEQ 266
+#define tGEQ 267
+#define tNEQ 268
+#define tAND 269
+#define tOR 270
+#define tBOOLEAN 271
+#define tSTRING 272
+#define tINT 273
+#define tFLOAT 274
+#define tINTVAL 275
+#define tIDENTIFIER 276
+#define tFLOATVAL 277
+#define tSTRINGVAL 278
+#define tTRUE 279
+#define tFALSE 280
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 21 "mini.y" /* yacc.c:1909  */
+#line 19 "mini.y" /* yacc.c:1909  */
 
 	int int_val;
 	char *string_val;
 	float float_val;
 	char charconst;
 	EXP *exp;
-	bool bool_val;
+	int bool_val;
+	TYPE *type;
 	STATEMENT *statement;
 
-#line 123 "parser.tab.c" /* yacc.c:1909  */
+#line 122 "parser.tab.c" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

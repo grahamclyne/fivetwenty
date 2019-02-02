@@ -6,10 +6,8 @@
 extern int yylineno;
 extern int g_tokens;
 extern char *yytext;
-extern EXP *root;
 void yyerror(const char *s) { fprintf(stderr, "Error: (line %d) %s\n", yylineno, s); exit(1); }
 int yylex();
-
 %}
 
 %code requires
@@ -24,16 +22,15 @@ int yylex();
 	float float_val;
 	char charconst;
 	EXP *exp;
-	bool bool_val;
+	int bool_val;
+	TYPE *type;
 	STATEMENT *statement;
 }
 
-%type <exp> program exp type
-
-%type <statement> statements statement assignment ifstatement elseifstatement comment
-%token	tVAR tWHILE tFLOAT tREAD tELSE 
-		tBOOLEAN tINT tIF tPRINT tCHARCONST 
-		tSTRING tCOMMENT tEQ tLEQ tGEQ tNEQ tAND tOR
+%type <exp> exp
+%type <type> type 
+%type <statement> statements statement assignment ifstatement elseifstatement comment elsestatement
+%token	tVAR tWHILE tREAD tELSE tIF tPRINT tCOMMENT tEQ tLEQ tGEQ tNEQ tAND tOR tBOOLEAN tSTRING tINT tFLOAT
 %token <int_val> tINTVAL
 %token <string_val> tIDENTIFIER
 %token <float_val> tFLOATVAL
@@ -48,14 +45,14 @@ int yylex();
 %left '*' '/'
 %left '+' '-'
 
-%start program
+%start statements
 
 %error-verbose
 %locations
 %% 
-program : statements { root = $1; }
-	;
-statements : statement statements { $$ = $2; $$->next = $1; }
+
+
+statements : statement statements { $$ = $1; $$->next = $2; }
 	| %empty { $$ = NULL; }
 	;
 
@@ -64,21 +61,23 @@ statement : tREAD '(' tIDENTIFIER ')' ';' { $$ = makeSTATEMENT_read($3); }
 	| assignment { $$ = $1; } 
 	| ifstatement { $$ = $1;}
 	| tWHILE '(' exp ')' '{' statements '}' { $$ = makeSTATEMENT_while($3, $6); }
-	| comment
+	| comment 
 	; 
 
-ifstatement : tIF '(' exp ')'  '{' statements '}' { $$ = makeSTATEMENT_if($3, $6); }
-	| tIF '(' exp ')'  '{' statements '}'  elseifstatement { $$ = makeSTATEMENT_ifelse($3, $6, $8);}
-	| tIF '(' exp ')'  '{' statements '}'  tELSE '{' statements '}' { $$ = makeSTATEMENT_ifelse($3, $6, $10); }
+ifstatement : tIF '(' exp ')'  '{' statements '}' elsestatement { $$ = makeSTATEMENT_if($3, $6); }
+	| tIF '(' exp ')'  '{' statements '}'  elseifstatement { $$ = makeSTATEMENT_if($3, $6);}
 	;
 
-elseifstatement : tELSE tIF '(' exp ')'  '{' statements '}'  elseifstatement { $$ = makeSTATEMENT_elseif($4, $7); }
-	| tELSE tIF '(' exp ')'  '{' statements '}' { $$ = makeSTATEMENT_if($4, $7); }
-	| tELSE tIF '(' exp ')'  '{' statements '}'  tELSE '{' statements '}' { $$ = makeSTATEMENT_if($4, $7); }
+elseifstatement : tELSE tIF '(' exp ')'  '{' statements '}'  elseifstatement { $$ = makeSTATEMENT_if($4, $7); $$ = $9; }
+	| tELSE tIF '(' exp ')'  '{' statements '}'  elsestatement { $$ = makeSTATEMENT_if($4, $7); $$ = $9; }
 	;
 
-assignment : tVAR tIDENTIFIER ':' type '=' exp ';' { $$ = makeSTATEMENT_assign($2, $4, $6); }
-	| tIDENTIFIER '=' exp ';' { $$ = makeEXP_assign($1, $3); }
+elsestatement : tELSE '{' statements '}' { $$ = $3; }
+	| %empty { $$ = NULL; }
+	;
+
+assignment : tVAR tIDENTIFIER ':' type '=' exp ';' { $$ = makeSTATEMENT_declassign($2, $4, $6); }
+	| tIDENTIFIER '=' exp ';' { $$ = makeSTATEMENT_assign($1, $3); }
 	| tVAR tIDENTIFIER ':' type ';' { $$ = makeSTATEMENT_decl($2, $4); }
 	;
 
