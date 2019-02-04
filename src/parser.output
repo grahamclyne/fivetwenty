@@ -1,0 +1,1506 @@
+Grammar
+
+    0 $accept: program $end
+
+    1 program: statements
+
+    2 statements: statements statement
+    3           | %empty
+
+    4 statement: tREAD '(' tIDENTIFIER ')' ';'
+    5          | tPRINT '(' exp ')' ';'
+    6          | declaration
+    7          | tIDENTIFIER '=' exp ';'
+    8          | tIF '(' exp ')' '{' statements '}'
+    9          | tIF '(' exp ')' '{' statements '}' elseifstatement
+   10          | tWHILE '(' exp ')' '{' statements '}'
+   11          | tCOMMENT tIDENTIFIER
+
+   12 elseifstatement: tELSE tIF '(' exp ')' '{' statements '}' elseifstatement
+   13                | tELSE '{' statements '}'
+
+   14 declaration: tVAR tIDENTIFIER ':' type '=' exp ';'
+   15            | tVAR tIDENTIFIER ':' type ';'
+
+   16 type: tBOOLEAN
+   17     | tINT
+   18     | tFLOAT
+   19     | tSTRING
+
+   20 exp: tIDENTIFIER
+   21    | tINTVAL
+   22    | tFLOATVAL
+   23    | tTRUE
+   24    | tSTRINGVAL
+   25    | tFALSE
+   26    | exp '+' exp
+   27    | exp '*' exp
+   28    | exp '-' exp
+   29    | exp '/' exp
+   30    | exp tEQ exp
+   31    | exp tGEQ exp
+   32    | exp tLEQ exp
+   33    | exp tNEQ exp
+   34    | exp '<' exp
+   35    | exp '>' exp
+   36    | exp tAND exp
+   37    | exp tOR exp
+   38    | '-' exp
+   39    | '!' exp
+   40    | '(' exp ')'
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'!' (33) 39
+'(' (40) 4 5 8 9 10 12 40
+')' (41) 4 5 8 9 10 12 40
+'*' (42) 27
+'+' (43) 26
+'-' (45) 28 38
+'/' (47) 29
+':' (58) 14 15
+';' (59) 4 5 7 14 15
+'<' (60) 34
+'=' (61) 7 14
+'>' (62) 35
+'{' (123) 8 9 10 12 13
+'}' (125) 8 9 10 12 13
+error (256)
+tVAR (258) 14 15
+tWHILE (259) 10
+tREAD (260) 4
+tELSE (261) 12 13
+tIF (262) 8 9 12
+tPRINT (263) 5
+tCOMMENT (264) 11
+tEQ (265) 30
+tLEQ (266) 32
+tGEQ (267) 31
+tNEQ (268) 33
+tAND (269) 36
+tOR (270) 37
+tBOOLEAN (271) 16
+tSTRING (272) 19
+tINT (273) 17
+tFLOAT (274) 18
+tINTVAL (275) 21
+tIDENTIFIER (276) 4 7 11 14 15 20
+tFLOATVAL (277) 22
+tSTRINGVAL (278) 24
+tTRUE (279) 23
+tFALSE (280) 25
+
+
+Nonterminals, with rules where they appear
+
+$accept (40)
+    on left: 0
+program (41)
+    on left: 1, on right: 0
+statements (42)
+    on left: 2 3, on right: 1 2 8 9 10 12 13
+statement (43)
+    on left: 4 5 6 7 8 9 10 11, on right: 2
+elseifstatement (44)
+    on left: 12 13, on right: 9 12
+declaration (45)
+    on left: 14 15, on right: 6
+type (46)
+    on left: 16 17 18 19, on right: 14 15
+exp (47)
+    on left: 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37
+    38 39 40, on right: 5 7 8 9 10 12 14 26 27 28 29 30 31 32 33 34
+    35 36 37 38 39 40
+
+
+State 0
+
+    0 $accept: . program $end
+
+    $default  reduce using rule 3 (statements)
+
+    program     go to state 1
+    statements  go to state 2
+
+
+State 1
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 3
+
+
+State 2
+
+    1 program: statements .
+    2 statements: statements . statement
+
+    tVAR         shift, and go to state 4
+    tWHILE       shift, and go to state 5
+    tREAD        shift, and go to state 6
+    tIF          shift, and go to state 7
+    tPRINT       shift, and go to state 8
+    tCOMMENT     shift, and go to state 9
+    tIDENTIFIER  shift, and go to state 10
+
+    $default  reduce using rule 1 (program)
+
+    statement    go to state 11
+    declaration  go to state 12
+
+
+State 3
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 4
+
+   14 declaration: tVAR . tIDENTIFIER ':' type '=' exp ';'
+   15            | tVAR . tIDENTIFIER ':' type ';'
+
+    tIDENTIFIER  shift, and go to state 13
+
+
+State 5
+
+   10 statement: tWHILE . '(' exp ')' '{' statements '}'
+
+    '('  shift, and go to state 14
+
+
+State 6
+
+    4 statement: tREAD . '(' tIDENTIFIER ')' ';'
+
+    '('  shift, and go to state 15
+
+
+State 7
+
+    8 statement: tIF . '(' exp ')' '{' statements '}'
+    9          | tIF . '(' exp ')' '{' statements '}' elseifstatement
+
+    '('  shift, and go to state 16
+
+
+State 8
+
+    5 statement: tPRINT . '(' exp ')' ';'
+
+    '('  shift, and go to state 17
+
+
+State 9
+
+   11 statement: tCOMMENT . tIDENTIFIER
+
+    tIDENTIFIER  shift, and go to state 18
+
+
+State 10
+
+    7 statement: tIDENTIFIER . '=' exp ';'
+
+    '='  shift, and go to state 19
+
+
+State 11
+
+    2 statements: statements statement .
+
+    $default  reduce using rule 2 (statements)
+
+
+State 12
+
+    6 statement: declaration .
+
+    $default  reduce using rule 6 (statement)
+
+
+State 13
+
+   14 declaration: tVAR tIDENTIFIER . ':' type '=' exp ';'
+   15            | tVAR tIDENTIFIER . ':' type ';'
+
+    ':'  shift, and go to state 20
+
+
+State 14
+
+   10 statement: tWHILE '(' . exp ')' '{' statements '}'
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 30
+
+
+State 15
+
+    4 statement: tREAD '(' . tIDENTIFIER ')' ';'
+
+    tIDENTIFIER  shift, and go to state 31
+
+
+State 16
+
+    8 statement: tIF '(' . exp ')' '{' statements '}'
+    9          | tIF '(' . exp ')' '{' statements '}' elseifstatement
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 32
+
+
+State 17
+
+    5 statement: tPRINT '(' . exp ')' ';'
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 33
+
+
+State 18
+
+   11 statement: tCOMMENT tIDENTIFIER .
+
+    $default  reduce using rule 11 (statement)
+
+
+State 19
+
+    7 statement: tIDENTIFIER '=' . exp ';'
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 34
+
+
+State 20
+
+   14 declaration: tVAR tIDENTIFIER ':' . type '=' exp ';'
+   15            | tVAR tIDENTIFIER ':' . type ';'
+
+    tBOOLEAN  shift, and go to state 35
+    tSTRING   shift, and go to state 36
+    tINT      shift, and go to state 37
+    tFLOAT    shift, and go to state 38
+
+    type  go to state 39
+
+
+State 21
+
+   21 exp: tINTVAL .
+
+    $default  reduce using rule 21 (exp)
+
+
+State 22
+
+   20 exp: tIDENTIFIER .
+
+    $default  reduce using rule 20 (exp)
+
+
+State 23
+
+   22 exp: tFLOATVAL .
+
+    $default  reduce using rule 22 (exp)
+
+
+State 24
+
+   24 exp: tSTRINGVAL .
+
+    $default  reduce using rule 24 (exp)
+
+
+State 25
+
+   23 exp: tTRUE .
+
+    $default  reduce using rule 23 (exp)
+
+
+State 26
+
+   25 exp: tFALSE .
+
+    $default  reduce using rule 25 (exp)
+
+
+State 27
+
+   38 exp: '-' . exp
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 40
+
+
+State 28
+
+   39 exp: '!' . exp
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 41
+
+
+State 29
+
+   40 exp: '(' . exp ')'
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 42
+
+
+State 30
+
+   10 statement: tWHILE '(' exp . ')' '{' statements '}'
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+
+    tEQ   shift, and go to state 43
+    tLEQ  shift, and go to state 44
+    tGEQ  shift, and go to state 45
+    tNEQ  shift, and go to state 46
+    tAND  shift, and go to state 47
+    tOR   shift, and go to state 48
+    '<'   shift, and go to state 49
+    '>'   shift, and go to state 50
+    '*'   shift, and go to state 51
+    '/'   shift, and go to state 52
+    '+'   shift, and go to state 53
+    '-'   shift, and go to state 54
+    ')'   shift, and go to state 55
+
+
+State 31
+
+    4 statement: tREAD '(' tIDENTIFIER . ')' ';'
+
+    ')'  shift, and go to state 56
+
+
+State 32
+
+    8 statement: tIF '(' exp . ')' '{' statements '}'
+    9          | tIF '(' exp . ')' '{' statements '}' elseifstatement
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+
+    tEQ   shift, and go to state 43
+    tLEQ  shift, and go to state 44
+    tGEQ  shift, and go to state 45
+    tNEQ  shift, and go to state 46
+    tAND  shift, and go to state 47
+    tOR   shift, and go to state 48
+    '<'   shift, and go to state 49
+    '>'   shift, and go to state 50
+    '*'   shift, and go to state 51
+    '/'   shift, and go to state 52
+    '+'   shift, and go to state 53
+    '-'   shift, and go to state 54
+    ')'   shift, and go to state 57
+
+
+State 33
+
+    5 statement: tPRINT '(' exp . ')' ';'
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+
+    tEQ   shift, and go to state 43
+    tLEQ  shift, and go to state 44
+    tGEQ  shift, and go to state 45
+    tNEQ  shift, and go to state 46
+    tAND  shift, and go to state 47
+    tOR   shift, and go to state 48
+    '<'   shift, and go to state 49
+    '>'   shift, and go to state 50
+    '*'   shift, and go to state 51
+    '/'   shift, and go to state 52
+    '+'   shift, and go to state 53
+    '-'   shift, and go to state 54
+    ')'   shift, and go to state 58
+
+
+State 34
+
+    7 statement: tIDENTIFIER '=' exp . ';'
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+
+    tEQ   shift, and go to state 43
+    tLEQ  shift, and go to state 44
+    tGEQ  shift, and go to state 45
+    tNEQ  shift, and go to state 46
+    tAND  shift, and go to state 47
+    tOR   shift, and go to state 48
+    '<'   shift, and go to state 49
+    '>'   shift, and go to state 50
+    '*'   shift, and go to state 51
+    '/'   shift, and go to state 52
+    '+'   shift, and go to state 53
+    '-'   shift, and go to state 54
+    ';'   shift, and go to state 59
+
+
+State 35
+
+   16 type: tBOOLEAN .
+
+    $default  reduce using rule 16 (type)
+
+
+State 36
+
+   19 type: tSTRING .
+
+    $default  reduce using rule 19 (type)
+
+
+State 37
+
+   17 type: tINT .
+
+    $default  reduce using rule 17 (type)
+
+
+State 38
+
+   18 type: tFLOAT .
+
+    $default  reduce using rule 18 (type)
+
+
+State 39
+
+   14 declaration: tVAR tIDENTIFIER ':' type . '=' exp ';'
+   15            | tVAR tIDENTIFIER ':' type . ';'
+
+    ';'  shift, and go to state 60
+    '='  shift, and go to state 61
+
+
+State 40
+
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+   38    | '-' exp .
+
+    $default  reduce using rule 38 (exp)
+
+
+State 41
+
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+   39    | '!' exp .
+
+    $default  reduce using rule 39 (exp)
+
+
+State 42
+
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+   40    | '(' exp . ')'
+
+    tEQ   shift, and go to state 43
+    tLEQ  shift, and go to state 44
+    tGEQ  shift, and go to state 45
+    tNEQ  shift, and go to state 46
+    tAND  shift, and go to state 47
+    tOR   shift, and go to state 48
+    '<'   shift, and go to state 49
+    '>'   shift, and go to state 50
+    '*'   shift, and go to state 51
+    '/'   shift, and go to state 52
+    '+'   shift, and go to state 53
+    '-'   shift, and go to state 54
+    ')'   shift, and go to state 62
+
+
+State 43
+
+   30 exp: exp tEQ . exp
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 63
+
+
+State 44
+
+   32 exp: exp tLEQ . exp
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 64
+
+
+State 45
+
+   31 exp: exp tGEQ . exp
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 65
+
+
+State 46
+
+   33 exp: exp tNEQ . exp
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 66
+
+
+State 47
+
+   36 exp: exp tAND . exp
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 67
+
+
+State 48
+
+   37 exp: exp tOR . exp
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 68
+
+
+State 49
+
+   34 exp: exp '<' . exp
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 69
+
+
+State 50
+
+   35 exp: exp '>' . exp
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 70
+
+
+State 51
+
+   27 exp: exp '*' . exp
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 71
+
+
+State 52
+
+   29 exp: exp '/' . exp
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 72
+
+
+State 53
+
+   26 exp: exp '+' . exp
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 73
+
+
+State 54
+
+   28 exp: exp '-' . exp
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 74
+
+
+State 55
+
+   10 statement: tWHILE '(' exp ')' . '{' statements '}'
+
+    '{'  shift, and go to state 75
+
+
+State 56
+
+    4 statement: tREAD '(' tIDENTIFIER ')' . ';'
+
+    ';'  shift, and go to state 76
+
+
+State 57
+
+    8 statement: tIF '(' exp ')' . '{' statements '}'
+    9          | tIF '(' exp ')' . '{' statements '}' elseifstatement
+
+    '{'  shift, and go to state 77
+
+
+State 58
+
+    5 statement: tPRINT '(' exp ')' . ';'
+
+    ';'  shift, and go to state 78
+
+
+State 59
+
+    7 statement: tIDENTIFIER '=' exp ';' .
+
+    $default  reduce using rule 7 (statement)
+
+
+State 60
+
+   15 declaration: tVAR tIDENTIFIER ':' type ';' .
+
+    $default  reduce using rule 15 (declaration)
+
+
+State 61
+
+   14 declaration: tVAR tIDENTIFIER ':' type '=' . exp ';'
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 79
+
+
+State 62
+
+   40 exp: '(' exp ')' .
+
+    $default  reduce using rule 40 (exp)
+
+
+State 63
+
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   30    | exp tEQ exp .
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+
+    tLEQ  shift, and go to state 44
+    tGEQ  shift, and go to state 45
+    '<'   shift, and go to state 49
+    '>'   shift, and go to state 50
+    '*'   shift, and go to state 51
+    '/'   shift, and go to state 52
+    '+'   shift, and go to state 53
+    '-'   shift, and go to state 54
+
+    $default  reduce using rule 30 (exp)
+
+
+State 64
+
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   32    | exp tLEQ exp .
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+
+    '*'  shift, and go to state 51
+    '/'  shift, and go to state 52
+    '+'  shift, and go to state 53
+    '-'  shift, and go to state 54
+
+    $default  reduce using rule 32 (exp)
+
+
+State 65
+
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   31    | exp tGEQ exp .
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+
+    '*'  shift, and go to state 51
+    '/'  shift, and go to state 52
+    '+'  shift, and go to state 53
+    '-'  shift, and go to state 54
+
+    $default  reduce using rule 31 (exp)
+
+
+State 66
+
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   33    | exp tNEQ exp .
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+
+    tLEQ  shift, and go to state 44
+    tGEQ  shift, and go to state 45
+    '<'   shift, and go to state 49
+    '>'   shift, and go to state 50
+    '*'   shift, and go to state 51
+    '/'   shift, and go to state 52
+    '+'   shift, and go to state 53
+    '-'   shift, and go to state 54
+
+    $default  reduce using rule 33 (exp)
+
+
+State 67
+
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   36    | exp tAND exp .
+   37    | exp . tOR exp
+
+    tEQ   shift, and go to state 43
+    tLEQ  shift, and go to state 44
+    tGEQ  shift, and go to state 45
+    tNEQ  shift, and go to state 46
+    '<'   shift, and go to state 49
+    '>'   shift, and go to state 50
+    '*'   shift, and go to state 51
+    '/'   shift, and go to state 52
+    '+'   shift, and go to state 53
+    '-'   shift, and go to state 54
+
+    $default  reduce using rule 36 (exp)
+
+
+State 68
+
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+   37    | exp tOR exp .
+
+    tEQ   shift, and go to state 43
+    tLEQ  shift, and go to state 44
+    tGEQ  shift, and go to state 45
+    tNEQ  shift, and go to state 46
+    tAND  shift, and go to state 47
+    '<'   shift, and go to state 49
+    '>'   shift, and go to state 50
+    '*'   shift, and go to state 51
+    '/'   shift, and go to state 52
+    '+'   shift, and go to state 53
+    '-'   shift, and go to state 54
+
+    $default  reduce using rule 37 (exp)
+
+
+State 69
+
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   34    | exp '<' exp .
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+
+    '*'  shift, and go to state 51
+    '/'  shift, and go to state 52
+    '+'  shift, and go to state 53
+    '-'  shift, and go to state 54
+
+    $default  reduce using rule 34 (exp)
+
+
+State 70
+
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   35    | exp '>' exp .
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+
+    '*'  shift, and go to state 51
+    '/'  shift, and go to state 52
+    '+'  shift, and go to state 53
+    '-'  shift, and go to state 54
+
+    $default  reduce using rule 35 (exp)
+
+
+State 71
+
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   27    | exp '*' exp .
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+
+    '+'  shift, and go to state 53
+    '-'  shift, and go to state 54
+
+    $default  reduce using rule 27 (exp)
+
+
+State 72
+
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   29    | exp '/' exp .
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+
+    '+'  shift, and go to state 53
+    '-'  shift, and go to state 54
+
+    $default  reduce using rule 29 (exp)
+
+
+State 73
+
+   26 exp: exp . '+' exp
+   26    | exp '+' exp .
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+
+    $default  reduce using rule 26 (exp)
+
+
+State 74
+
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   28    | exp '-' exp .
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+
+    $default  reduce using rule 28 (exp)
+
+
+State 75
+
+   10 statement: tWHILE '(' exp ')' '{' . statements '}'
+
+    $default  reduce using rule 3 (statements)
+
+    statements  go to state 80
+
+
+State 76
+
+    4 statement: tREAD '(' tIDENTIFIER ')' ';' .
+
+    $default  reduce using rule 4 (statement)
+
+
+State 77
+
+    8 statement: tIF '(' exp ')' '{' . statements '}'
+    9          | tIF '(' exp ')' '{' . statements '}' elseifstatement
+
+    $default  reduce using rule 3 (statements)
+
+    statements  go to state 81
+
+
+State 78
+
+    5 statement: tPRINT '(' exp ')' ';' .
+
+    $default  reduce using rule 5 (statement)
+
+
+State 79
+
+   14 declaration: tVAR tIDENTIFIER ':' type '=' exp . ';'
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+
+    tEQ   shift, and go to state 43
+    tLEQ  shift, and go to state 44
+    tGEQ  shift, and go to state 45
+    tNEQ  shift, and go to state 46
+    tAND  shift, and go to state 47
+    tOR   shift, and go to state 48
+    '<'   shift, and go to state 49
+    '>'   shift, and go to state 50
+    '*'   shift, and go to state 51
+    '/'   shift, and go to state 52
+    '+'   shift, and go to state 53
+    '-'   shift, and go to state 54
+    ';'   shift, and go to state 82
+
+
+State 80
+
+    2 statements: statements . statement
+   10 statement: tWHILE '(' exp ')' '{' statements . '}'
+
+    tVAR         shift, and go to state 4
+    tWHILE       shift, and go to state 5
+    tREAD        shift, and go to state 6
+    tIF          shift, and go to state 7
+    tPRINT       shift, and go to state 8
+    tCOMMENT     shift, and go to state 9
+    tIDENTIFIER  shift, and go to state 10
+    '}'          shift, and go to state 83
+
+    statement    go to state 11
+    declaration  go to state 12
+
+
+State 81
+
+    2 statements: statements . statement
+    8 statement: tIF '(' exp ')' '{' statements . '}'
+    9          | tIF '(' exp ')' '{' statements . '}' elseifstatement
+
+    tVAR         shift, and go to state 4
+    tWHILE       shift, and go to state 5
+    tREAD        shift, and go to state 6
+    tIF          shift, and go to state 7
+    tPRINT       shift, and go to state 8
+    tCOMMENT     shift, and go to state 9
+    tIDENTIFIER  shift, and go to state 10
+    '}'          shift, and go to state 84
+
+    statement    go to state 11
+    declaration  go to state 12
+
+
+State 82
+
+   14 declaration: tVAR tIDENTIFIER ':' type '=' exp ';' .
+
+    $default  reduce using rule 14 (declaration)
+
+
+State 83
+
+   10 statement: tWHILE '(' exp ')' '{' statements '}' .
+
+    $default  reduce using rule 10 (statement)
+
+
+State 84
+
+    8 statement: tIF '(' exp ')' '{' statements '}' .
+    9          | tIF '(' exp ')' '{' statements '}' . elseifstatement
+
+    tELSE  shift, and go to state 85
+
+    $default  reduce using rule 8 (statement)
+
+    elseifstatement  go to state 86
+
+
+State 85
+
+   12 elseifstatement: tELSE . tIF '(' exp ')' '{' statements '}' elseifstatement
+   13                | tELSE . '{' statements '}'
+
+    tIF  shift, and go to state 87
+    '{'  shift, and go to state 88
+
+
+State 86
+
+    9 statement: tIF '(' exp ')' '{' statements '}' elseifstatement .
+
+    $default  reduce using rule 9 (statement)
+
+
+State 87
+
+   12 elseifstatement: tELSE tIF . '(' exp ')' '{' statements '}' elseifstatement
+
+    '('  shift, and go to state 89
+
+
+State 88
+
+   13 elseifstatement: tELSE '{' . statements '}'
+
+    $default  reduce using rule 3 (statements)
+
+    statements  go to state 90
+
+
+State 89
+
+   12 elseifstatement: tELSE tIF '(' . exp ')' '{' statements '}' elseifstatement
+
+    tINTVAL      shift, and go to state 21
+    tIDENTIFIER  shift, and go to state 22
+    tFLOATVAL    shift, and go to state 23
+    tSTRINGVAL   shift, and go to state 24
+    tTRUE        shift, and go to state 25
+    tFALSE       shift, and go to state 26
+    '-'          shift, and go to state 27
+    '!'          shift, and go to state 28
+    '('          shift, and go to state 29
+
+    exp  go to state 91
+
+
+State 90
+
+    2 statements: statements . statement
+   13 elseifstatement: tELSE '{' statements . '}'
+
+    tVAR         shift, and go to state 4
+    tWHILE       shift, and go to state 5
+    tREAD        shift, and go to state 6
+    tIF          shift, and go to state 7
+    tPRINT       shift, and go to state 8
+    tCOMMENT     shift, and go to state 9
+    tIDENTIFIER  shift, and go to state 10
+    '}'          shift, and go to state 92
+
+    statement    go to state 11
+    declaration  go to state 12
+
+
+State 91
+
+   12 elseifstatement: tELSE tIF '(' exp . ')' '{' statements '}' elseifstatement
+   26 exp: exp . '+' exp
+   27    | exp . '*' exp
+   28    | exp . '-' exp
+   29    | exp . '/' exp
+   30    | exp . tEQ exp
+   31    | exp . tGEQ exp
+   32    | exp . tLEQ exp
+   33    | exp . tNEQ exp
+   34    | exp . '<' exp
+   35    | exp . '>' exp
+   36    | exp . tAND exp
+   37    | exp . tOR exp
+
+    tEQ   shift, and go to state 43
+    tLEQ  shift, and go to state 44
+    tGEQ  shift, and go to state 45
+    tNEQ  shift, and go to state 46
+    tAND  shift, and go to state 47
+    tOR   shift, and go to state 48
+    '<'   shift, and go to state 49
+    '>'   shift, and go to state 50
+    '*'   shift, and go to state 51
+    '/'   shift, and go to state 52
+    '+'   shift, and go to state 53
+    '-'   shift, and go to state 54
+    ')'   shift, and go to state 93
+
+
+State 92
+
+   13 elseifstatement: tELSE '{' statements '}' .
+
+    $default  reduce using rule 13 (elseifstatement)
+
+
+State 93
+
+   12 elseifstatement: tELSE tIF '(' exp ')' . '{' statements '}' elseifstatement
+
+    '{'  shift, and go to state 94
+
+
+State 94
+
+   12 elseifstatement: tELSE tIF '(' exp ')' '{' . statements '}' elseifstatement
+
+    $default  reduce using rule 3 (statements)
+
+    statements  go to state 95
+
+
+State 95
+
+    2 statements: statements . statement
+   12 elseifstatement: tELSE tIF '(' exp ')' '{' statements . '}' elseifstatement
+
+    tVAR         shift, and go to state 4
+    tWHILE       shift, and go to state 5
+    tREAD        shift, and go to state 6
+    tIF          shift, and go to state 7
+    tPRINT       shift, and go to state 8
+    tCOMMENT     shift, and go to state 9
+    tIDENTIFIER  shift, and go to state 10
+    '}'          shift, and go to state 96
+
+    statement    go to state 11
+    declaration  go to state 12
+
+
+State 96
+
+   12 elseifstatement: tELSE tIF '(' exp ')' '{' statements '}' . elseifstatement
+
+    tELSE  shift, and go to state 85
+
+    elseifstatement  go to state 97
+
+
+State 97
+
+   12 elseifstatement: tELSE tIF '(' exp ')' '{' statements '}' elseifstatement .
+
+    $default  reduce using rule 12 (elseifstatement)

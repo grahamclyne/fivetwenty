@@ -46,6 +46,7 @@ print	{ if (g_tokens) printf("tPRINT \n"); return  tPRINT;}
 "<="	{ if (g_tokens) printf("tLEQ \n"); return  tLEQ;}
 "&&" 	{ if (g_tokens) printf("tAND \n"); return  tAND;}
 "||" 	{ if (g_tokens) printf("tOR \n"); return  tOR;}
+"!" 	{ if (g_tokens) printf("tNOT \n"); return '!';}
 
 0|([1-9][0-9]*) {
 	yylval.int_val = atoi(yytext);
@@ -57,7 +58,7 @@ print	{ if (g_tokens) printf("tPRINT \n"); return  tPRINT;}
 	{ if (g_tokens) printf("tFLOATVAL(%s)\n", yytext); return  tFLOATVAL;}
 }
 
-(["][a-zA-Z0-9_ !~`'@#$%^&*()\[\]{}<>=+\-*/:;.,?]*(\\[abnfrtv"\\])*[a-zA-Z0-9_ !~`'@#$%^&*()\[\]{}<>=+\-*/:;.,?]*["])	 { 
+["]([a-zA-Z0-9_ !~`'@#|$%^&*()\[\]{}<>=+\-*/:;.,?]*(\\[abnfrtv"\\])*)*["]	 { 
 	yylval.string_val = strdup(yytext);
 	{ if (g_tokens) printf("tSTRINGVAL(%s)\n", yytext); return  tSTRINGVAL;}
 }

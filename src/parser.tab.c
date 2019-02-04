@@ -40,12 +40,13 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 14 "mini.y" /* yacc.c:1909  */
+#line 16 "mini.y" /* yacc.c:1909  */
 
 	#include <stdbool.h>
 	#include "tree.h"
+	#include "pretty.h"
 
-#line 49 "parser.tab.c" /* yacc.c:1909  */
+#line 50 "parser.tab.c" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -107,7 +108,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 19 "mini.y" /* yacc.c:1909  */
+#line 22 "mini.y" /* yacc.c:1909  */
 
 	int int_val;
 	char *string_val;
@@ -117,8 +118,9 @@ union YYSTYPE
 	int bool_val;
 	TYPE *type;
 	STATEMENT *statement;
+	PROGRAM *program;
 
-#line 122 "parser.tab.c" /* yacc.c:1909  */
+#line 124 "parser.tab.c" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

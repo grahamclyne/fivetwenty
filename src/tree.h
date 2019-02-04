@@ -13,8 +13,26 @@ typedef enum
     k_expressionKindDivision,
     k_expressionKindEquality,
     k_expressionKindGreaterThan,
-    k_expressionKindLessThan
+    k_expressionKindLessThan,
+    k_expressionKindGreaterThanEquals,
+    k_expressionKindLessThanEquals,
+    k_expressionKindNotEqual,
+    k_expressionKindAnd,
+    k_expressionKindOr
 } ExpressionKind;
+
+typedef enum
+{
+    k_statementKindWhile,
+    k_statementKindPrint,
+    k_statementKindRead,
+    k_statementKindIf,
+    k_statementKindElse,
+    k_statementKindElseIf,
+    k_statementKindAssign,
+    k_statementKindDeclaration,
+    k_statementKindDeclarationAssignment
+} StatementKind;
 
 typedef enum
 {
@@ -55,12 +73,9 @@ typedef struct STATEMENT STATEMENT;
 struct STATEMENT
 {
     int lineno;
+    StatementKind kind;
     union {
-        struct
-        {
-            char *id;
-            EXP *exp;
-        } assignment;
+
         struct
         {
             EXP *condition;
@@ -71,6 +86,15 @@ struct STATEMENT
             EXP *condition;
             STATEMENT *body;
         } ifstatement;
+        struct
+        {
+            STATEMENT *body;
+        } elsestatement;
+        struct
+        {
+            EXP *condition;
+            STATEMENT *body;
+        } elseifstatement;
         struct
         {
             char *id;
@@ -90,7 +114,20 @@ struct STATEMENT
         {
             EXP *exp;
         } print;
+        struct
+        {
+            char *id;
+            EXP *exp;
+        } assignment;
+
     } val;
+    STATEMENT *next;
+};
+
+typedef struct PROGRAM PROGRAM;
+struct PROGRAM
+{
+    int lineno;
     STATEMENT *next;
 };
 
@@ -101,16 +138,18 @@ EXP *makeEXP_intLiteral(int intLiteral);
 EXP *makeEXP_booleanLiteral(int boolLiteral);
 EXP *makeEXP_binary(ExpressionKind op, EXP *lhs, EXP *rhs);
 STATEMENT *makeSTATEMENT_if(EXP *condition, STATEMENT *body);
+STATEMENT *makeSTATEMENT_elseif(EXP *condition, STATEMENT *statements);
+STATEMENT *makeSTATEMENT_else( STATEMENT *statements);
 STATEMENT *makeSTATEMENT_while(EXP *condigition, STATEMENT *body);
-STATEMENT *makeSTATEMENT_assign(char *id, EXP *exp);
 STATEMENT *makeSTATEMENT_decl(char *id, TYPE *type);
 STATEMENT *makeSTATEMENT_declassign(char *id, TYPE *type, EXP *value);
 STATEMENT *makeSTATEMENT_print(EXP *exp);
 STATEMENT *makeSTATEMENT_read(char *id);
-STATEMENT *makeSTATEMENT_ifelse(EXP *exp, STATEMENT *statements, STATEMENT *elsestatements);
+STATEMENT *makeSTATEMENT_assign(char *id, EXP *exp);
 TYPE *makeTYPEbool();
 TYPE *makeTYPEint();
 TYPE *makeTYPEfloat();
 TYPE *makeTYPEstring();
+PROGRAM *makePROGRAM();
 
 #endif
