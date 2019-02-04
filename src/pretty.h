@@ -6,5 +6,5 @@
 void prettySTATEMENT(STATEMENT *s);
 void prettyEXP(EXP *e);
 void prettyTYPE(TYPE *t);
-void prettyPROGRAM(PROGRAM *s);
+void printOP(int x);
 #endif /* !PRETTY_H */

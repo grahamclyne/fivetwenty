@@ -593,7 +593,7 @@ static const yytype_uint8 yydefact[] =
        0,     0,     0,     0,     0,     0,     0,     0,     0,     8,
       16,     0,    41,    31,    33,    32,    34,    37,    38,    35,
       36,    28,    30,    27,    29,     4,     5,     4,     6,     0,
-       0,     0,    15,    11,     9,     0,    10,     0,     4,     0,
+       0,     0,    15,    11,    10,     0,     9,     0,     4,     0,
        0,     0,    14,     0,     4,     0,     0,    13
 };
 
@@ -705,8 +705,8 @@ static const yytype_uint8 yyr1[] =
   /* YYR2[YYN] -- Number of symbols on the right hand side of rule YYN.  */
 static const yytype_uint8 yyr2[] =
 {
-       0,     2,     1,     2,     0,     5,     5,     1,     4,     7,
-       8,     7,     2,     9,     4,     7,     5,     1,     1,     1,
+       0,     2,     1,     2,     0,     5,     5,     1,     4,     8,
+       7,     7,     2,     9,     4,     7,     5,     1,     1,     1,
        1,     1,     1,     1,     1,     1,     1,     3,     3,     3,
        3,     3,     3,     3,     3,     3,     3,     3,     3,     2,
        2,     3
@@ -1522,13 +1522,13 @@ yyreduce:
 
   case 9:
 #line 69 "mini.y" /* yacc.c:1646  */
-    { (yyval.statement) = makeSTATEMENT_if((yyvsp[-4].exp), (yyvsp[-1].statement)); }
+    { (yyval.statement) = makeSTATEMENT_if((yyvsp[-5].exp), (yyvsp[-2].statement), (yyvsp[0].statement)); }
 #line 1527 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 10:
 #line 70 "mini.y" /* yacc.c:1646  */
-    { (yyval.statement) = makeSTATEMENT_if((yyvsp[-5].exp), (yyvsp[-2].statement)); (yyval.statement) = (yyvsp[0].statement); }
+    { (yyval.statement) = makeSTATEMENT_if((yyvsp[-4].exp), (yyvsp[-1].statement), NULL); }
 #line 1533 "parser.tab.h" /* yacc.c:1646  */
     break;
 
@@ -1546,7 +1546,7 @@ yyreduce:
 
   case 13:
 #line 75 "mini.y" /* yacc.c:1646  */
-    { (yyval.statement) = makeSTATEMENT_elseif((yyvsp[-5].exp), (yyvsp[-2].statement)); }
+    { (yyval.statement) = makeSTATEMENT_elseif((yyvsp[-5].exp), (yyvsp[-2].statement), (yyvsp[0].statement));}
 #line 1551 "parser.tab.h" /* yacc.c:1646  */
     break;
 
@@ -1654,13 +1654,13 @@ yyreduce:
 
   case 31:
 #line 100 "mini.y" /* yacc.c:1646  */
-    { (yyval.exp) = makeEXP_binary(k_expressionKindEquality, (yyvsp[-2].exp), (yyvsp[0].exp)); }
+    { (yyval.exp) = makeEXP_binary(k_expressionKindEquality,  (yyvsp[-2].exp), (yyvsp[0].exp)); }
 #line 1659 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 32:
 #line 101 "mini.y" /* yacc.c:1646  */
-    { (yyval.exp) = makeEXP_binary(k_expressionKindGreaterThanEquals, (yyvsp[-2].exp), (yyvsp[0].exp)); }
+    { (yyval.exp) = makeEXP_binary(k_expressionKindGreaterThanEquals,  (yyvsp[-2].exp), (yyvsp[0].exp)); }
 #line 1665 "parser.tab.h" /* yacc.c:1646  */
     break;
 
@@ -1672,19 +1672,19 @@ yyreduce:
 
   case 34:
 #line 103 "mini.y" /* yacc.c:1646  */
-    { (yyval.exp) = makeEXP_binary(k_expressionKindNotEqual, (yyvsp[-2].exp), (yyvsp[0].exp)); }
+    { (yyval.exp) = makeEXP_binary(k_expressionKindNotEqual,  (yyvsp[-2].exp), (yyvsp[0].exp)); }
 #line 1677 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 35:
 #line 104 "mini.y" /* yacc.c:1646  */
-    { (yyval.exp) = makeEXP_binary(k_expressionKindLessThan, (yyvsp[-2].exp), (yyvsp[0].exp)); }
+    { (yyval.exp) = makeEXP_binary(k_expressionKindLessThan,  (yyvsp[-2].exp), (yyvsp[0].exp)); }
 #line 1683 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 36:
 #line 105 "mini.y" /* yacc.c:1646  */
-    { (yyval.exp) = makeEXP_binary(k_expressionKindGreaterThan, (yyvsp[-2].exp), (yyvsp[0].exp)); }
+    { (yyval.exp) = makeEXP_binary(k_expressionKindGreaterThan,  (yyvsp[-2].exp), (yyvsp[0].exp)); }
 #line 1689 "parser.tab.h" /* yacc.c:1646  */
     break;
 
@@ -1696,19 +1696,19 @@ yyreduce:
 
   case 38:
 #line 107 "mini.y" /* yacc.c:1646  */
-    { (yyval.exp) = makeEXP_binary(k_expressionKindOr, (yyvsp[-2].exp), (yyvsp[0].exp)); }
+    { (yyval.exp) = makeEXP_binary(k_expressionKindOr,  (yyvsp[-2].exp), (yyvsp[0].exp)); }
 #line 1701 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 39:
 #line 108 "mini.y" /* yacc.c:1646  */
-    { (yyval.exp) = (yyvsp[0].exp); }
+    { (yyval.exp) = makeEXP_unary(k_expressionKindNegative, '-',(yyvsp[0].exp)); }
 #line 1707 "parser.tab.h" /* yacc.c:1646  */
     break;
 
   case 40:
 #line 109 "mini.y" /* yacc.c:1646  */
-    { (yyval.exp) = (yyvsp[0].exp); }
+    { (yyval.exp) = makeEXP_unary(k_expressionKindNot, '!',(yyvsp[0].exp)); }
 #line 1713 "parser.tab.h" /* yacc.c:1646  */
     break;
 

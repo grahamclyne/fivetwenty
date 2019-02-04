@@ -2,35 +2,29 @@
 
 #define HashSize 317
 
-typedef enum{classSym,fieldSym,methodSym,formalSym,localSym} SymbolKind;
+typedef enum {exp, type} SymbolKind;
 
 typedef struct SYMBOL {
     char *name;
-    SymbolKind kind;
-    union {
-      struct CLASS *classS;
-      struct FIELD *fieldS;
-      struct METHOD *methodS;
-      struct FORMAL *formalS;
-      struct LOCAL *localS;
-    } val;
+    TYPE type;
     struct SYMBOL *next;
 } SYMBOL; 
 
 typedef struct SymbolTable {
     SYMBOL *table[HashSize];
-    struct SymbolTable *next;
+    struct SymbolTable *parent;
 } SymbolTable;
 
 SymbolTable *initSymbolTable();
 
 SymbolTable *scopeSymbolTable(SymbolTable *t);
 
-SYMBOL *putSymbol(SymbolTable *t, char *name, SymbolKind kind);
+SYMBOL *putSymbol(SymbolTable *t, char *name, TYPE *type);
 
 SYMBOL *getSymbol(SymbolTable *t, char *name);
 
 int defSymbol(SymbolTable *t, char *name);
 
-//int subClass(CLASS *sub, CLASS *super);
-
+void symSTATEMENT(STATEMENT *s, SymbolTable *st);
+void symEXP(EXP *exp, SymbolTable *st);
+void printSymbolTable();

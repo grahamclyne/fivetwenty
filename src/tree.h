@@ -18,7 +18,9 @@ typedef enum
     k_expressionKindLessThanEquals,
     k_expressionKindNotEqual,
     k_expressionKindAnd,
-    k_expressionKindOr
+    k_expressionKindOr,
+    k_expressionKindNot, 
+    k_expressionKindNegative
 } ExpressionKind;
 
 typedef enum
@@ -39,7 +41,6 @@ typedef enum
     k_typeInt,
     k_typeBool,
     k_typeString,
-    k_typeIdentifier,
     k_typeFloat
 } TypeKind;
 
@@ -48,6 +49,7 @@ struct TYPE
 {
     int lineno;
     TypeKind kind;
+    char * string;
 };
 
 typedef struct EXP EXP;
@@ -66,6 +68,10 @@ struct EXP
             EXP *lhs;
             EXP *rhs;
         } binary;
+        struct {
+            char op;
+            EXP *exp;
+        } unary;
     } val;
 };
 
@@ -75,7 +81,6 @@ struct STATEMENT
     int lineno;
     StatementKind kind;
     union {
-
         struct
         {
             EXP *condition;
@@ -85,6 +90,7 @@ struct STATEMENT
         {
             EXP *condition;
             STATEMENT *body;
+            STATEMENT *elsestatement;
         } ifstatement;
         struct
         {
@@ -94,6 +100,7 @@ struct STATEMENT
         {
             EXP *condition;
             STATEMENT *body;
+            STATEMENT *elsestatement;
         } elseifstatement;
         struct
         {
@@ -137,9 +144,10 @@ EXP *makeEXP_floatLiteral(float floatLiteral);
 EXP *makeEXP_intLiteral(int intLiteral);
 EXP *makeEXP_booleanLiteral(int boolLiteral);
 EXP *makeEXP_binary(ExpressionKind op, EXP *lhs, EXP *rhs);
-STATEMENT *makeSTATEMENT_if(EXP *condition, STATEMENT *body);
-STATEMENT *makeSTATEMENT_elseif(EXP *condition, STATEMENT *statements);
-STATEMENT *makeSTATEMENT_else( STATEMENT *statements);
+EXP *makeEXP_unary(ExpressionKind, char op, EXP *exp);
+STATEMENT *makeSTATEMENT_if(EXP *condition, STATEMENT *body, STATEMENT *elsest);
+STATEMENT *makeSTATEMENT_elseif(EXP *condition, STATEMENT *statements, STATEMENT *elsestatement);
+STATEMENT *makeSTATEMENT_else(STATEMENT *statements);
 STATEMENT *makeSTATEMENT_while(EXP *condigition, STATEMENT *body);
 STATEMENT *makeSTATEMENT_decl(char *id, TYPE *type);
 STATEMENT *makeSTATEMENT_declassign(char *id, TYPE *type, EXP *value);
@@ -150,6 +158,5 @@ TYPE *makeTYPEbool();
 TYPE *makeTYPEint();
 TYPE *makeTYPEfloat();
 TYPE *makeTYPEstring();
-PROGRAM *makePROGRAM();
 
 #endif

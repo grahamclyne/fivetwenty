@@ -24,8 +24,15 @@ EXP *makeEXP_intLiteral(int intLiteral)
 	e->val.intLiteral = intLiteral;
 	return e;
 }
-
-EXP *makeEXP_binary(ExpressionKind op, EXP *lhs, EXP *rhs)
+EXP *makeEXP_unary(ExpressionKind op,char op1,  EXP *exp){
+	EXP *e = malloc(sizeof(EXP));
+	e->lineno = yylineno;
+	e->kind = op;
+	e->val.unary.op = op1;
+	e->val.unary.exp  = exp;
+	return e;
+}
+EXP *makeEXP_binary(ExpressionKind op,  EXP *lhs, EXP *rhs)
 {
 	EXP *e = malloc(sizeof(EXP));
 	e->lineno = yylineno;
@@ -121,13 +128,14 @@ STATEMENT *makeSTATEMENT_print(EXP *exp)
 	return s;
 }
 
-STATEMENT *makeSTATEMENT_if(EXP *exp, STATEMENT *statements)
+STATEMENT *makeSTATEMENT_if(EXP *exp, STATEMENT *statements, STATEMENT *elsestatements)
 {
 	STATEMENT *s = malloc(sizeof(STATEMENT));
 	s->lineno = yylineno;
 	s->kind = k_statementKindIf;
 	s->val.ifstatement.condition = exp;
 	s->val.ifstatement.body = statements;
+	s->val.ifstatement.elsestatement = elsestatements;
 	return s;
 }
 STATEMENT *makeSTATEMENT_else(STATEMENT *body)
@@ -138,13 +146,14 @@ STATEMENT *makeSTATEMENT_else(STATEMENT *body)
 	s->val.elsestatement.body = body;
 	return s;
 }
-STATEMENT *makeSTATEMENT_elseif(EXP *exp, STATEMENT *body)
+STATEMENT *makeSTATEMENT_elseif(EXP *exp, STATEMENT *body, STATEMENT *elsestatement)
 {
 	STATEMENT *s = malloc(sizeof(STATEMENT));
 	s->lineno = yylineno;
 	s->kind = k_statementKindElseIf;
 	s->val.elseifstatement.condition = exp;
 	s->val.elseifstatement.body = body;
+	s->val.elseifstatement.elsestatement = elsestatement;
 	return s;
 }
 TYPE *makeTYPEbool()
@@ -152,6 +161,7 @@ TYPE *makeTYPEbool()
 	TYPE *t = malloc(sizeof(TYPE));
 	t->lineno = yylineno;
 	t->kind = k_typeBool;
+	t->string = "bool";
 	return t;
 }
 
@@ -160,6 +170,7 @@ TYPE *makeTYPEint()
 	TYPE *t = malloc(sizeof(TYPE));
 	t->lineno = yylineno;
 	t->kind = k_typeInt;
+	t->string = "int";
 	return t;
 }
 
@@ -168,6 +179,7 @@ TYPE *makeTYPEfloat()
 	TYPE *t = malloc(sizeof(TYPE));
 	t->lineno = yylineno;
 	t->kind = k_typeFloat;
+	t->string = "float";
 	return t;
 }
 
@@ -176,5 +188,7 @@ TYPE *makeTYPEstring()
 	TYPE *t = malloc(sizeof(TYPE));
 	t->lineno = yylineno;
 	t->kind = k_typeString;
+	t->string = "string";
 	return t;
 }
+

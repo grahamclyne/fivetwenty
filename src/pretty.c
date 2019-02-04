@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include "pretty.h"
-
 void prettyEXP(EXP *e)
 {
     switch (e->kind)
@@ -106,12 +105,16 @@ void prettyEXP(EXP *e)
 
 void prettySTATEMENT(STATEMENT *s)
 {
+    if (s->next != NULL)
+    {
+        prettySTATEMENT(s->next);
+    }
     switch (s->kind)
     {
     case k_statementKindAssign:
         printf("%s = ", s->val.assignment.id);
         prettyEXP(s->val.assignment.exp);
-        printf(";");
+        printf(";\n");
         break;
     case k_statementKindWhile:
         printf("while");
@@ -119,51 +122,60 @@ void prettySTATEMENT(STATEMENT *s)
         prettyEXP(s->val.loop.condition);
         printf(")");
         printf("{");
+        printf("\n");
         prettySTATEMENT(s->val.loop.body);
         printf("}");
+        printf("\n");
         break;
     case k_statementKindPrint:
         printf("printf(");
         prettyEXP(s->val.print.exp);
-        printf(");");
+        printf(");\n");
         break;
     case k_statementKindRead:
-        printf("read(%s);", s->val.read.id);
+        printf("read(%s);\n", s->val.read.id);
         break;
     case k_statementKindIf:
         printf("if ( ");
         prettyEXP(s->val.ifstatement.condition);
         printf(" ) {");
+        printf("\n");
         prettySTATEMENT(s->val.ifstatement.body);
-        printf("}");
+        printf("}\n");
+        if (s->val.ifstatement.elsestatement != NULL)
+        {
+            prettySTATEMENT(s->val.ifstatement.elsestatement);
+        }
         break;
     case k_statementKindElseIf:
         printf("else if (");
         prettyEXP(s->val.elseifstatement.condition);
         printf(") {");
+        printf("\n");
         prettySTATEMENT(s->val.elseifstatement.body);
-        printf("}");
-    break;
+        printf("}\n");
+        if (s->val.ifstatement.elsestatement != NULL)
+        {
+            prettySTATEMENT(s->val.ifstatement.elsestatement);
+        }
+        break;
     case k_statementKindElse:
         printf("else {");
         prettySTATEMENT(s->val.elsestatement.body);
-        printf("}");
-    break;
+        printf("}\n");
+        break;
     case k_statementKindDeclaration:
-        prettyTYPE(s->val.declassign.type);
-        printf("%s;", s->val.declassign.id);
+        printf("var %s : ", s->val.decl.id);
+        prettyTYPE(s->val.decl.type);
+        printf(";\n");
         break;
     case k_statementKindDeclarationAssignment:
+        printf("var %s : ", s->val.declassign.id);
         prettyTYPE(s->val.declassign.type);
-        printf("%s", s->val.declassign.id);
         printf(" = ");
         prettyEXP(s->val.declassign.exp);
-        printf(";");
+        printf(";\n");
         break;
-    }
-    if (s->next != NULL)
-    {
-        prettySTATEMENT(s->next);
     }
 }
 
@@ -187,7 +199,4 @@ void prettyTYPE(TYPE *t)
     }
     printf("%s", string);
 }
-void prettyPROGRAM(PROGRAM *p)
-{
-    prettySTATEMENT(p->next);
-}
+

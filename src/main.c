@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include "pretty.h"
 #include "tree.h"
+#include "symbol.h"
 
 void yyparse();
 int yylex();
@@ -51,25 +52,31 @@ int main(int argc, char *argv[])
     }
     else if (strcmp("symbol", argv[1]) == 0)
     {
+        yyparse();
+        SymbolTable *st = initSymbolTable();
+        symSTATEMENT(root, st);
+        printSymbolTable(st);
     }
     else if (strcmp("typecheck", argv[1]) == 0)
     {
     }
     else if (strcmp("codegen", argv[1]) == 0)
-    {   
-        char* filename = argv[1];
-        for(int i = 0; i < sizeof(filename)/sizeof(filename[0]); i++){
-            if(filename[i] == '.') {
-                filename[i+1] = 'c';
-                filename[i+2] = '\0';
+    {
+        char *filename = argv[1];
+        for (int i = 0; i < sizeof(filename) / sizeof(filename[0]); i++)
+        {
+            if (filename[i] == '.')
+            {
+                filename[i + 1] = 'c';
+                filename[i + 2] = '\0';
                 break;
             }
         }
-      //  fgets(filename, 10, stdin);
-      //  printf("%s", filename);
+        //  fgets(filename, 10, stdin);
+        //  printf("%s", filename);
 
-          yyparse();
-        freopen("output.c","w", stdout);
+        yyparse();
+        freopen("output.c", "w", stdout);
         printf("#include <stdbool.h>\n");
         printf("#include <stdlib.h>\n");
         printf("int main() {\n");
@@ -77,7 +84,6 @@ int main(int argc, char *argv[])
         printf("}");
         fclose(stdout);
         return 0;
-
     }
     else
     {

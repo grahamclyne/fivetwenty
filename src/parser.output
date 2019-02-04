@@ -11,8 +11,8 @@ Grammar
     5          | tPRINT '(' exp ')' ';'
     6          | declaration
     7          | tIDENTIFIER '=' exp ';'
-    8          | tIF '(' exp ')' '{' statements '}'
-    9          | tIF '(' exp ')' '{' statements '}' elseifstatement
+    8          | tIF '(' exp ')' '{' statements '}' elseifstatement
+    9          | tIF '(' exp ')' '{' statements '}'
    10          | tWHILE '(' exp ')' '{' statements '}'
    11          | tCOMMENT tIDENTIFIER
 
@@ -104,7 +104,7 @@ statements (42)
 statement (43)
     on left: 4 5 6 7 8 9 10 11, on right: 2
 elseifstatement (44)
-    on left: 12 13, on right: 9 12
+    on left: 12 13, on right: 8 12
 declaration (45)
     on left: 14 15, on right: 6
 type (46)
@@ -182,8 +182,8 @@ State 6
 
 State 7
 
-    8 statement: tIF . '(' exp ')' '{' statements '}'
-    9          | tIF . '(' exp ')' '{' statements '}' elseifstatement
+    8 statement: tIF . '(' exp ')' '{' statements '}' elseifstatement
+    9          | tIF . '(' exp ')' '{' statements '}'
 
     '('  shift, and go to state 16
 
@@ -257,8 +257,8 @@ State 15
 
 State 16
 
-    8 statement: tIF '(' . exp ')' '{' statements '}'
-    9          | tIF '(' . exp ')' '{' statements '}' elseifstatement
+    8 statement: tIF '(' . exp ')' '{' statements '}' elseifstatement
+    9          | tIF '(' . exp ')' '{' statements '}'
 
     tINTVAL      shift, and go to state 21
     tIDENTIFIER  shift, and go to state 22
@@ -460,8 +460,8 @@ State 31
 
 State 32
 
-    8 statement: tIF '(' exp . ')' '{' statements '}'
-    9          | tIF '(' exp . ')' '{' statements '}' elseifstatement
+    8 statement: tIF '(' exp . ')' '{' statements '}' elseifstatement
+    9          | tIF '(' exp . ')' '{' statements '}'
    26 exp: exp . '+' exp
    27    | exp . '*' exp
    28    | exp . '-' exp
@@ -878,8 +878,8 @@ State 56
 
 State 57
 
-    8 statement: tIF '(' exp ')' . '{' statements '}'
-    9          | tIF '(' exp ')' . '{' statements '}' elseifstatement
+    8 statement: tIF '(' exp ')' . '{' statements '}' elseifstatement
+    9          | tIF '(' exp ')' . '{' statements '}'
 
     '{'  shift, and go to state 77
 
@@ -1242,8 +1242,8 @@ State 76
 
 State 77
 
-    8 statement: tIF '(' exp ')' '{' . statements '}'
-    9          | tIF '(' exp ')' '{' . statements '}' elseifstatement
+    8 statement: tIF '(' exp ')' '{' . statements '}' elseifstatement
+    9          | tIF '(' exp ')' '{' . statements '}'
 
     $default  reduce using rule 3 (statements)
 
@@ -1309,8 +1309,8 @@ State 80
 State 81
 
     2 statements: statements . statement
-    8 statement: tIF '(' exp ')' '{' statements . '}'
-    9          | tIF '(' exp ')' '{' statements . '}' elseifstatement
+    8 statement: tIF '(' exp ')' '{' statements . '}' elseifstatement
+    9          | tIF '(' exp ')' '{' statements . '}'
 
     tVAR         shift, and go to state 4
     tWHILE       shift, and go to state 5
@@ -1341,12 +1341,12 @@ State 83
 
 State 84
 
-    8 statement: tIF '(' exp ')' '{' statements '}' .
-    9          | tIF '(' exp ')' '{' statements '}' . elseifstatement
+    8 statement: tIF '(' exp ')' '{' statements '}' . elseifstatement
+    9          | tIF '(' exp ')' '{' statements '}' .
 
     tELSE  shift, and go to state 85
 
-    $default  reduce using rule 8 (statement)
+    $default  reduce using rule 9 (statement)
 
     elseifstatement  go to state 86
 
@@ -1362,9 +1362,9 @@ State 85
 
 State 86
 
-    9 statement: tIF '(' exp ')' '{' statements '}' elseifstatement .
+    8 statement: tIF '(' exp ')' '{' statements '}' elseifstatement .
 
-    $default  reduce using rule 9 (statement)
+    $default  reduce using rule 8 (statement)
 
 
 State 87
