@@ -3,11 +3,12 @@
 var temp: int = 0;
 var n: int = 1;
 var sin: float = 0.0;
-
+var num: int = 0;
+var input: int = 0;
 while(n < 1000) {
 
     //computing power (-1)^(n-1)
-    var x: int = -1;
+    var x: float = -1.0;
     while(temp < (n-1)){
         x = x * temp;
     }
@@ -34,4 +35,4 @@ while(n < 1000) {
     sin = (x * variable ) / facttot;
 }
 
-print("the value returned is " + sin);
+print("the value returned is "  sin);

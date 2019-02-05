@@ -17,7 +17,6 @@ int g_tokens;
 STATEMENT *root;
 int main(int argc, char *argv[])
 {
-    yyparse();
     if (argc < 2)
     {
         printf("enter tokens|scan|parse|pretty|symbol|typecheck|codegen\n");
@@ -34,6 +33,7 @@ int main(int argc, char *argv[])
     }
     else if (strcmp("scan", argv[1]) == 0)
     {
+
         int x = yylex();
         while (yylex() != 0)
         {
@@ -43,23 +43,31 @@ int main(int argc, char *argv[])
     }
     else if (strcmp("parse", argv[1]) == 0)
     {
+            yyparse();
+
         printf("OK\n");
         return 0;
     }
     else if (strcmp("pretty", argv[1]) == 0)
     {
-        //COMMENTS DO NOT WORK!!!
+            yyparse();
+
         prettySTATEMENT(root);
     }
     else if (strcmp("symbol", argv[1]) == 0)
     {
+            yyparse();
+
         SymbolTable *st = initSymbolTable();
         symSTATEMENT(root, st);
-        printSymbolTable(st);
+        printSymbolTable(st, 0);
     }
     else if (strcmp("typecheck", argv[1]) == 0)
     {
+            yyparse();
+
         SymbolTable *st = initSymbolTable();
+        st->typechecked = 1;
         symSTATEMENT(root,st);
         typeSTATEMENT(root,st);
         printf("OK\n");
@@ -67,10 +75,16 @@ int main(int argc, char *argv[])
     }
     else if (strcmp("codegen", argv[1]) == 0)
     {
+         yyparse();
+        if(argv[2] == NULL) {
+            printf("Please input a filename after codegen.\n");
+            exit(1);
+        }
         char *filename = argv[2];
         char *output = strcat(filename, ".c");
         FILE *fptr = fopen(output, "w");
         freopen(output, "w", stdout);
+        printf("#include<stdio.h>\n");
         printf("#include<stdbool.h>\n");
         printf("int main() {\n");
         codeSTATEMENT(root);

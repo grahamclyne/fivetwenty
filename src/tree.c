@@ -62,11 +62,11 @@ EXP *makeEXP_floatLiteral(float floatLiteral)
 	return e;
 }
 
-EXP *makeEXP_booleanLiteral(int boolLiteral)
+EXP *makeEXP_booleanLiteral(char *boolLiteral)
 {
 	EXP *e = malloc(sizeof(EXP));
 	e->lineno = yylineno;
-	e->kind = k_expressionKindIntLiteral;
+	e->kind = k_expressionKindBooleanLiteral;
 	e->val.boolLiteral = boolLiteral;
 	return e;
 }
@@ -179,7 +179,7 @@ TYPE *makeTYPEbool()
 	TYPE *t = malloc(sizeof(TYPE));
 	t->lineno = yylineno;
 	t->kind = k_typeBool;
-	t->string = "bool";
+	t->string = "boolean";
 	return t;
 }
 

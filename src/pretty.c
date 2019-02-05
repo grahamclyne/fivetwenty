@@ -57,9 +57,10 @@ void prettySTATEMENT(STATEMENT *s)
         printf(")");
         printf("{");
         printf("\n");
+
         prettySTATEMENT(s->val.loop.body);
         printf("}");
-        printf("\n");
+        printf("\n\n");
         break;
     case k_statementKindPrint:
         printf("printf(");
@@ -75,7 +76,7 @@ void prettySTATEMENT(STATEMENT *s)
         printf(" ) {");
         printf("\n");
         prettySTATEMENT(s->val.ifstatement.body);
-        printf("}\n");
+        printf("}\n\n");
         if (s->val.ifstatement.elsestatement != NULL)
         {
             prettySTATEMENT(s->val.ifstatement.elsestatement);
@@ -87,7 +88,7 @@ void prettySTATEMENT(STATEMENT *s)
         printf(") {");
         printf("\n");
         prettySTATEMENT(s->val.elseifstatement.body);
-        printf("}\n");
+        printf("}\n\n");
         if (s->val.ifstatement.elsestatement != NULL)
         {
             prettySTATEMENT(s->val.ifstatement.elsestatement);
@@ -95,8 +96,9 @@ void prettySTATEMENT(STATEMENT *s)
         break;
     case k_statementKindElse:
         printf("else {");
+        printf("\t");
         prettySTATEMENT(s->val.elsestatement.body);
-        printf("}\n");
+        printf("}\n\n");
         break;
     case k_statementKindDeclaration:
         printf("var %s : ", s->val.decl.id);
@@ -111,7 +113,7 @@ void prettySTATEMENT(STATEMENT *s)
         printf(";\n");
         break;
     case k_statementKindComment:
-        printf("\\\\ %s\n", s->val.comment.id);
+        printf("%s\n", s->val.comment.id);
     }
 }
 

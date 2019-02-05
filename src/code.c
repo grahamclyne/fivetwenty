@@ -18,6 +18,9 @@ void codeEXP(EXP *e)
         codeEXP(e->val.binary.rhs);
         printf(")");
         break;
+    case k_expressionKindBooleanLiteral:
+        printf("%s", e->val.boolLiteral);
+        break;
     case k_expressionKindFloatLiteral:
         printf("%f", e->val.floatLiteral);
         break;
@@ -65,7 +68,7 @@ void codeSTATEMENT(STATEMENT *s)
         printf(");\n");
         break;
     case k_statementKindRead:
-        printf("read(%s);\n", s->val.read.id);
+        printf("scanf(%s);\n", s->val.read.id);
         break;
     case k_statementKindIf:
         printf("if ( ");

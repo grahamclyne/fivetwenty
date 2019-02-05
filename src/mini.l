@@ -69,7 +69,11 @@ print	{ if (g_tokens) printf("tPRINT \n"); return  tPRINT;}
 	yyerror(yylval.string_val);
 }
 
-((\/\/).*) /* ignore comments */
+((\/\/).*) {
+	yylval.comment_val = strdup(yytext);
+		{ if (g_tokens) printf("tIDENTIFIER(%s)\n", yytext); return  tCOMMENT;}
+	yyerror(yylval.comment_val);
+}
 
 .  { fprintf(stderr, "Error: (line %d) unexpected char ’%s’\n", yylineno, yytext);
 exit(1);

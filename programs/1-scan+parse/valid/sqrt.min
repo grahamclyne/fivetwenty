@@ -7,6 +7,16 @@ while (iter) {
 	var quot: float = x / guess;
 	guess = 0.5 * (guess + quot);
 	iter = iter - 1;
+	if(x) {
+		var dd : string = "her";
+	}
+	//dd = "ds";
+}
+while(iter) {
+	var mm: float = x;
+	while(x) {
+		var nn:float = x;
+	}
 }
 print(guess);
 print(guess * guess);

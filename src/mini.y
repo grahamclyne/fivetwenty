@@ -24,8 +24,9 @@ extern STATEMENT *root;
 	char *string_val;
 	float float_val;
 	char charconst;
+	char *comment_val;
 	EXP *exp;
-	int bool_val;
+	char* bool_val;
 	TYPE *type;
 	STATEMENT *statement;
 	PROGRAM *program;
@@ -35,12 +36,13 @@ extern STATEMENT *root;
 %type <program> program 
 %type <type> type 
 %type <statement>  statements statement elseifstatement declaration 
-%token	tVAR tWHILE tREAD tELSE tIF tPRINT tCOMMENT tEQ tLEQ tGEQ tNEQ tAND tOR tBOOLEAN tSTRING tINT tFLOAT 
+%token	tVAR tWHILE tREAD tELSE tIF tPRINT tEQ tLEQ tGEQ tNEQ tAND tOR tBOOLEAN tSTRING tINT tFLOAT 
 %token <int_val> tINTVAL
 %token <string_val> tIDENTIFIER
 %token <float_val> tFLOATVAL
 %token <string_val> tSTRINGVAL
 %token <bool_val> tTRUE tFALSE
+%token <comment_val> tCOMMENT
 
 
 %left tOR
@@ -69,7 +71,7 @@ statement : tREAD '(' tIDENTIFIER ')' ';' { $$ = makeSTATEMENT_read($3); }
 			| tIF '(' exp ')' '{' statements '}' elseifstatement { $$ = makeSTATEMENT_if($3, $6, $8); }
 			| tIF '(' exp ')' '{' statements '}'  { $$ = makeSTATEMENT_if($3, $6, NULL); }
 			| tWHILE '(' exp ')' '{' statements '}' { $$ = makeSTATEMENT_while($3, $6); }
-			| tCOMMENT tIDENTIFIER  { $$ = makeSTATEMENT_comment($2); }
+			| tCOMMENT { $$ = makeSTATEMENT_comment($1); }
 			; 
 
 elseifstatement : tELSE tIF '(' exp ')'  '{' statements '}' elseifstatement { $$ = makeSTATEMENT_elseif($4, $7, $9);}
@@ -82,32 +84,32 @@ declaration : tVAR tIDENTIFIER ':' type '=' exp ';' { $$ = makeSTATEMENT_declass
 
 
 type : tBOOLEAN { $$ =	makeTYPEbool(); }
-		| tINT  { $$ = makeTYPEint(); }
-		| tFLOAT  { $$ = makeTYPEfloat(); }
-		| tSTRING  { $$ = makeTYPEstring(); }
-		;
+			| tINT  { $$ = makeTYPEint(); }
+			| tFLOAT  { $$ = makeTYPEfloat(); }
+			| tSTRING  { $$ = makeTYPEstring(); }
+			;
 
 exp : tIDENTIFIER { $$ = makeEXP_identifier($1); }
- 		| tINTVAL { $$ = makeEXP_intLiteral($1); }
- 		| tFLOATVAL { $$ = makeEXP_floatLiteral($1); }
-		| tTRUE { $$ = makeEXP_booleanLiteral($1); }
-		| tSTRINGVAL { $$ = makeEXP_stringLiteral($1); }
-		| tFALSE  { $$ = makeEXP_booleanLiteral($1); }
-		| exp '+' exp { $$ = makeEXP_binary("+", $1, $3); }
-		| exp '*' exp { $$ = makeEXP_binary( "*", $1, $3); }
-		| exp '-' exp { $$ = makeEXP_binary("-", $1, $3); }
-		| exp '/' exp { $$ = makeEXP_binary("/", $1, $3); }
-		| exp tEQ exp { $$ = makeEXP_binary("==",   $1, $3); }
-		| exp tGEQ exp { $$ = makeEXP_binary(">=",   $1, $3); }
-		| exp tLEQ exp { $$ = makeEXP_binary( "<=", $1, $3); }
-		| exp tNEQ exp { $$ = makeEXP_binary( "!=",  $1, $3); }
-		| exp '<' exp { $$ = makeEXP_binary( "<",  $1, $3); }
-		| exp '>' exp { $$ = makeEXP_binary(">",   $1, $3); }
-		| exp tAND exp { $$ = makeEXP_binary( "&&", $1, $3); }
-		| exp tOR exp { $$ = makeEXP_binary( "||",  $1, $3); }
-		| '-' exp %prec '-' { $$ = makeEXP_unary(k_expressionKindNegative, '-',$2); }
-		| '!' exp %prec '!' { $$ = makeEXP_unary(k_expressionKindNot, '!',$2); }
-		| '(' exp ')'{ $$ = makeEXP_bracketed($2); }
-		;
+			| tINTVAL { $$ = makeEXP_intLiteral($1); }
+			| tFLOATVAL { $$ = makeEXP_floatLiteral($1); }
+			| tTRUE { $$ = makeEXP_booleanLiteral("true"); }
+			| tSTRINGVAL { $$ = makeEXP_stringLiteral($1); }
+			| tFALSE  { $$ = makeEXP_booleanLiteral("false"); }
+			| exp '+' exp { $$ = makeEXP_binary("+", $1, $3); }
+			| exp '*' exp { $$ = makeEXP_binary( "*", $1, $3); }
+			| exp '-' exp { $$ = makeEXP_binary("-", $1, $3); }
+			| exp '/' exp { $$ = makeEXP_binary("/", $1, $3); }
+			| exp tEQ exp { $$ = makeEXP_binary("==",   $1, $3); }
+			| exp tGEQ exp { $$ = makeEXP_binary(">=",   $1, $3); }
+			| exp tLEQ exp { $$ = makeEXP_binary( "<=", $1, $3); }
+			| exp tNEQ exp { $$ = makeEXP_binary( "!=",  $1, $3); }
+			| exp '<' exp { $$ = makeEXP_binary( "<",  $1, $3); }
+			| exp '>' exp { $$ = makeEXP_binary(">",   $1, $3); }
+			| exp tAND exp { $$ = makeEXP_binary( "&&", $1, $3); }
+			| exp tOR exp { $$ = makeEXP_binary( "||",  $1, $3); }
+			| '-' exp %prec '-' { $$ = makeEXP_unary(k_expressionKindNegative, '-',$2); }
+			| '!' exp %prec '!' { $$ = makeEXP_unary(k_expressionKindNot, '!',$2); }
+			| '(' exp ')'{ $$ = makeEXP_bracketed($2); }
+			;
 
 %%

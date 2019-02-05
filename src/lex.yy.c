@@ -1059,21 +1059,25 @@ YY_RULE_SETUP
 case 38:
 YY_RULE_SETUP
 #line 72 "mini.l"
-/* ignore comments */
+{
+	yylval.comment_val = strdup(yytext);
+		{ if (g_tokens) printf("tIDENTIFIER(%s)\n", yytext); return  tCOMMENT;}
+	yyerror(yylval.comment_val);
+}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 74 "mini.l"
+#line 78 "mini.l"
 { fprintf(stderr, "Error: (line %d) unexpected char ’%s’\n", yylineno, yytext);
 exit(1);
 }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 78 "mini.l"
+#line 82 "mini.l"
 ECHO;
 	YY_BREAK
-#line 1077 "lex.yy.c"
+#line 1081 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2049,6 +2053,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 78 "mini.l"
+#line 82 "mini.l"
 
 

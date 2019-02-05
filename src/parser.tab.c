@@ -59,23 +59,23 @@ extern int yydebug;
     tELSE = 261,
     tIF = 262,
     tPRINT = 263,
-    tCOMMENT = 264,
-    tEQ = 265,
-    tLEQ = 266,
-    tGEQ = 267,
-    tNEQ = 268,
-    tAND = 269,
-    tOR = 270,
-    tBOOLEAN = 271,
-    tSTRING = 272,
-    tINT = 273,
-    tFLOAT = 274,
-    tINTVAL = 275,
-    tIDENTIFIER = 276,
-    tFLOATVAL = 277,
-    tSTRINGVAL = 278,
-    tTRUE = 279,
-    tFALSE = 280
+    tEQ = 264,
+    tLEQ = 265,
+    tGEQ = 266,
+    tNEQ = 267,
+    tAND = 268,
+    tOR = 269,
+    tBOOLEAN = 270,
+    tSTRING = 271,
+    tINT = 272,
+    tFLOAT = 273,
+    tINTVAL = 274,
+    tIDENTIFIER = 275,
+    tFLOATVAL = 276,
+    tSTRINGVAL = 277,
+    tTRUE = 278,
+    tFALSE = 279,
+    tCOMMENT = 280
   };
 #endif
 /* Tokens.  */
@@ -85,23 +85,23 @@ extern int yydebug;
 #define tELSE 261
 #define tIF 262
 #define tPRINT 263
-#define tCOMMENT 264
-#define tEQ 265
-#define tLEQ 266
-#define tGEQ 267
-#define tNEQ 268
-#define tAND 269
-#define tOR 270
-#define tBOOLEAN 271
-#define tSTRING 272
-#define tINT 273
-#define tFLOAT 274
-#define tINTVAL 275
-#define tIDENTIFIER 276
-#define tFLOATVAL 277
-#define tSTRINGVAL 278
-#define tTRUE 279
-#define tFALSE 280
+#define tEQ 264
+#define tLEQ 265
+#define tGEQ 266
+#define tNEQ 267
+#define tAND 268
+#define tOR 269
+#define tBOOLEAN 270
+#define tSTRING 271
+#define tINT 272
+#define tFLOAT 273
+#define tINTVAL 274
+#define tIDENTIFIER 275
+#define tFLOATVAL 276
+#define tSTRINGVAL 277
+#define tTRUE 278
+#define tFALSE 279
+#define tCOMMENT 280
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -114,13 +114,14 @@ union YYSTYPE
 	char *string_val;
 	float float_val;
 	char charconst;
+	char *comment_val;
 	EXP *exp;
-	int bool_val;
+	char* bool_val;
 	TYPE *type;
 	STATEMENT *statement;
 	PROGRAM *program;
 
-#line 124 "parser.tab.c" /* yacc.c:1909  */
+#line 125 "parser.tab.c" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

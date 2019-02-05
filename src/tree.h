@@ -6,10 +6,11 @@ typedef enum
     k_expressionKindIdentifier,
     k_expressionKindIntLiteral,
     k_expressionKindFloatLiteral,
+    k_expressionKindBooleanLiteral,
     k_expressionKindStringLiteral,
     k_expressionKindBinary,
     k_expressionKindBracketed,
-    k_expressionKindNot, 
+    k_expressionKindNot,
     k_expressionKindNegative
 } ExpressionKind;
 
@@ -30,9 +31,9 @@ typedef enum
 typedef enum
 {
     k_typeInt,
+    k_typeFloat,
     k_typeBool,
-    k_typeString,
-    k_typeFloat
+    k_typeString
 } TypeKind;
 
 typedef struct TYPE TYPE;
@@ -40,7 +41,7 @@ struct TYPE
 {
     int lineno;
     TypeKind kind;
-    char * string;
+    char *string;
 };
 
 typedef struct EXP EXP;
@@ -53,17 +54,19 @@ struct EXP
         int intLiteral;
         float floatLiteral;
         char *stringLiteral;
-        int boolLiteral;
-        struct {
+        char *boolLiteral;
+        struct
+        {
             EXP *exp;
-        }bracketed;
+        } bracketed;
         struct
         {
             EXP *lhs;
             EXP *rhs;
-            char* opera;
+            char *opera;
         } binary;
-        struct {
+        struct
+        {
             char op;
             EXP *exp;
         } unary;
@@ -121,9 +124,10 @@ struct STATEMENT
             char *id;
             EXP *exp;
         } assignment;
-        struct {
+        struct
+        {
             char *id;
-        }comment;
+        } comment;
     } val;
     STATEMENT *next;
 };
@@ -139,8 +143,8 @@ EXP *makeEXP_identifier(char *id);
 EXP *makeEXP_stringLiteral(char *stringLiteral);
 EXP *makeEXP_floatLiteral(float floatLiteral);
 EXP *makeEXP_intLiteral(int intLiteral);
-EXP *makeEXP_booleanLiteral(int boolLiteral);
-EXP *makeEXP_binary(char* opera, EXP *lhs, EXP *rhs);
+EXP *makeEXP_booleanLiteral(char *boolLiteral);
+EXP *makeEXP_binary(char *opera, EXP *lhs, EXP *rhs);
 EXP *makeEXP_unary(ExpressionKind, char op, EXP *exp);
 EXP *makeEXP_bracketed(EXP *exp);
 STATEMENT *makeSTATEMENT_if(EXP *condition, STATEMENT *body, STATEMENT *elsest);
@@ -157,6 +161,5 @@ TYPE *makeTYPEbool();
 TYPE *makeTYPEint();
 TYPE *makeTYPEfloat();
 TYPE *makeTYPEstring();
-
 
 #endif
