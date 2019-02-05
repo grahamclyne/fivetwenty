@@ -7,6 +7,7 @@
 #include "pretty.h"
 #include "tree.h"
 #include "symbol.h"
+#include "code.h"
 
 void yyparse();
 int yylex();
@@ -16,10 +17,11 @@ int g_tokens;
 STATEMENT *root;
 int main(int argc, char *argv[])
 {
+    yyparse();
     if (argc < 2)
     {
-        printf("enter tokens|scan|parse|pretty|symbol|typecheck\n");
-        return -1;
+        printf("enter tokens|scan|parse|pretty|symbol|typecheck|codegen\n");
+        return 1;
     }
     g_tokens = 0;
     if (strcmp("tokens", argv[1]) == 0)
@@ -41,48 +43,39 @@ int main(int argc, char *argv[])
     }
     else if (strcmp("parse", argv[1]) == 0)
     {
-        yyparse();
         printf("OK\n");
         return 0;
     }
     else if (strcmp("pretty", argv[1]) == 0)
     {
-        yyparse();
+        //COMMENTS DO NOT WORK!!!
         prettySTATEMENT(root);
     }
     else if (strcmp("symbol", argv[1]) == 0)
     {
-        yyparse();
         SymbolTable *st = initSymbolTable();
         symSTATEMENT(root, st);
         printSymbolTable(st);
     }
     else if (strcmp("typecheck", argv[1]) == 0)
     {
+        SymbolTable *st = initSymbolTable();
+        symSTATEMENT(root,st);
+        typeSTATEMENT(root,st);
+        printf("OK\n");
+        return 0;
     }
     else if (strcmp("codegen", argv[1]) == 0)
     {
-        char *filename = argv[1];
-        for (int i = 0; i < sizeof(filename) / sizeof(filename[0]); i++)
-        {
-            if (filename[i] == '.')
-            {
-                filename[i + 1] = 'c';
-                filename[i + 2] = '\0';
-                break;
-            }
-        }
-        //  fgets(filename, 10, stdin);
-        //  printf("%s", filename);
-
-        yyparse();
-        freopen("output.c", "w", stdout);
-        printf("#include <stdbool.h>\n");
-        printf("#include <stdlib.h>\n");
+        char *filename = argv[2];
+        char *output = strcat(filename, ".c");
+        FILE *fptr = fopen(output, "w");
+        freopen(output, "w", stdout);
+        printf("#include<stdbool.h>\n");
         printf("int main() {\n");
-        prettySTATEMENT(root);
+        codeSTATEMENT(root);
         printf("}");
-        fclose(stdout);
+        fclose(fptr);
         return 0;
     }
     else

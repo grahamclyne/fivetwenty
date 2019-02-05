@@ -69,7 +69,7 @@ statement : tREAD '(' tIDENTIFIER ')' ';' { $$ = makeSTATEMENT_read($3); }
 			| tIF '(' exp ')' '{' statements '}' elseifstatement { $$ = makeSTATEMENT_if($3, $6, $8); }
 			| tIF '(' exp ')' '{' statements '}'  { $$ = makeSTATEMENT_if($3, $6, NULL); }
 			| tWHILE '(' exp ')' '{' statements '}' { $$ = makeSTATEMENT_while($3, $6); }
-			| tCOMMENT tIDENTIFIER  { $$ = NULL; }
+			| tCOMMENT tIDENTIFIER  { $$ = makeSTATEMENT_comment($2); }
 			; 
 
 elseifstatement : tELSE tIF '(' exp ')'  '{' statements '}' elseifstatement { $$ = makeSTATEMENT_elseif($4, $7, $9);}
@@ -93,21 +93,21 @@ exp : tIDENTIFIER { $$ = makeEXP_identifier($1); }
 		| tTRUE { $$ = makeEXP_booleanLiteral($1); }
 		| tSTRINGVAL { $$ = makeEXP_stringLiteral($1); }
 		| tFALSE  { $$ = makeEXP_booleanLiteral($1); }
-		| exp '+' exp { $$ = makeEXP_binary(k_expressionKindAddition, $1, $3); }
-		| exp '*' exp { $$ = makeEXP_binary(k_expressionKindMultiplication, $1, $3); }
-		| exp '-' exp { $$ = makeEXP_binary(k_expressionKindSubtraction, $1, $3); }
-		| exp '/' exp { $$ = makeEXP_binary(k_expressionKindDivision, $1, $3); }
-		| exp tEQ exp { $$ = makeEXP_binary(k_expressionKindEquality,  $1, $3); }
-		| exp tGEQ exp { $$ = makeEXP_binary(k_expressionKindGreaterThanEquals,  $1, $3); }
-		| exp tLEQ exp { $$ = makeEXP_binary(k_expressionKindLessThan, $1, $3); }
-		| exp tNEQ exp { $$ = makeEXP_binary(k_expressionKindNotEqual,  $1, $3); }
-		| exp '<' exp { $$ = makeEXP_binary(k_expressionKindLessThan,  $1, $3); }
-		| exp '>' exp { $$ = makeEXP_binary(k_expressionKindGreaterThan,  $1, $3); }
-		| exp tAND exp { $$ = makeEXP_binary(k_expressionKindAnd, $1, $3); }
-		| exp tOR exp { $$ = makeEXP_binary(k_expressionKindOr,  $1, $3); }
+		| exp '+' exp { $$ = makeEXP_binary("+", $1, $3); }
+		| exp '*' exp { $$ = makeEXP_binary( "*", $1, $3); }
+		| exp '-' exp { $$ = makeEXP_binary("-", $1, $3); }
+		| exp '/' exp { $$ = makeEXP_binary("/", $1, $3); }
+		| exp tEQ exp { $$ = makeEXP_binary("==",   $1, $3); }
+		| exp tGEQ exp { $$ = makeEXP_binary(">=",   $1, $3); }
+		| exp tLEQ exp { $$ = makeEXP_binary( "<=", $1, $3); }
+		| exp tNEQ exp { $$ = makeEXP_binary( "!=",  $1, $3); }
+		| exp '<' exp { $$ = makeEXP_binary( "<",  $1, $3); }
+		| exp '>' exp { $$ = makeEXP_binary(">",   $1, $3); }
+		| exp tAND exp { $$ = makeEXP_binary( "&&", $1, $3); }
+		| exp tOR exp { $$ = makeEXP_binary( "||",  $1, $3); }
 		| '-' exp %prec '-' { $$ = makeEXP_unary(k_expressionKindNegative, '-',$2); }
 		| '!' exp %prec '!' { $$ = makeEXP_unary(k_expressionKindNot, '!',$2); }
-		| '(' exp ')'{ $$ = $2; }
+		| '(' exp ')'{ $$ = makeEXP_bracketed($2); }
 		;
 
 %%

@@ -7,18 +7,8 @@ typedef enum
     k_expressionKindIntLiteral,
     k_expressionKindFloatLiteral,
     k_expressionKindStringLiteral,
-    k_expressionKindAddition,
-    k_expressionKindSubtraction,
-    k_expressionKindMultiplication,
-    k_expressionKindDivision,
-    k_expressionKindEquality,
-    k_expressionKindGreaterThan,
-    k_expressionKindLessThan,
-    k_expressionKindGreaterThanEquals,
-    k_expressionKindLessThanEquals,
-    k_expressionKindNotEqual,
-    k_expressionKindAnd,
-    k_expressionKindOr,
+    k_expressionKindBinary,
+    k_expressionKindBracketed,
     k_expressionKindNot, 
     k_expressionKindNegative
 } ExpressionKind;
@@ -33,7 +23,8 @@ typedef enum
     k_statementKindElseIf,
     k_statementKindAssign,
     k_statementKindDeclaration,
-    k_statementKindDeclarationAssignment
+    k_statementKindDeclarationAssignment,
+    k_statementKindComment
 } StatementKind;
 
 typedef enum
@@ -63,10 +54,14 @@ struct EXP
         float floatLiteral;
         char *stringLiteral;
         int boolLiteral;
+        struct {
+            EXP *exp;
+        }bracketed;
         struct
         {
             EXP *lhs;
             EXP *rhs;
+            char* opera;
         } binary;
         struct {
             char op;
@@ -126,7 +121,9 @@ struct STATEMENT
             char *id;
             EXP *exp;
         } assignment;
-
+        struct {
+            char *id;
+        }comment;
     } val;
     STATEMENT *next;
 };
@@ -143,8 +140,9 @@ EXP *makeEXP_stringLiteral(char *stringLiteral);
 EXP *makeEXP_floatLiteral(float floatLiteral);
 EXP *makeEXP_intLiteral(int intLiteral);
 EXP *makeEXP_booleanLiteral(int boolLiteral);
-EXP *makeEXP_binary(ExpressionKind op, EXP *lhs, EXP *rhs);
+EXP *makeEXP_binary(char* opera, EXP *lhs, EXP *rhs);
 EXP *makeEXP_unary(ExpressionKind, char op, EXP *exp);
+EXP *makeEXP_bracketed(EXP *exp);
 STATEMENT *makeSTATEMENT_if(EXP *condition, STATEMENT *body, STATEMENT *elsest);
 STATEMENT *makeSTATEMENT_elseif(EXP *condition, STATEMENT *statements, STATEMENT *elsestatement);
 STATEMENT *makeSTATEMENT_else(STATEMENT *statements);
@@ -154,9 +152,11 @@ STATEMENT *makeSTATEMENT_declassign(char *id, TYPE *type, EXP *value);
 STATEMENT *makeSTATEMENT_print(EXP *exp);
 STATEMENT *makeSTATEMENT_read(char *id);
 STATEMENT *makeSTATEMENT_assign(char *id, EXP *exp);
+STATEMENT *makeSTATEMENT_comment(char *id);
 TYPE *makeTYPEbool();
 TYPE *makeTYPEint();
 TYPE *makeTYPEfloat();
 TYPE *makeTYPEstring();
+
 
 #endif

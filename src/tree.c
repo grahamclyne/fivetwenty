@@ -24,20 +24,22 @@ EXP *makeEXP_intLiteral(int intLiteral)
 	e->val.intLiteral = intLiteral;
 	return e;
 }
-EXP *makeEXP_unary(ExpressionKind op,char op1,  EXP *exp){
-	EXP *e = malloc(sizeof(EXP));
-	e->lineno = yylineno;
-	e->kind = op;
-	e->val.unary.op = op1;
-	e->val.unary.exp  = exp;
-	return e;
-}
-EXP *makeEXP_binary(ExpressionKind op,  EXP *lhs, EXP *rhs)
+EXP *makeEXP_unary(ExpressionKind op, char op1, EXP *exp)
 {
 	EXP *e = malloc(sizeof(EXP));
 	e->lineno = yylineno;
 	e->kind = op;
+	e->val.unary.op = op1;
+	e->val.unary.exp = exp;
+	return e;
+}
+EXP *makeEXP_binary(char *opera, EXP *lhs, EXP *rhs)
+{
+	EXP *e = malloc(sizeof(EXP));
+	e->lineno = yylineno;
+	e->kind = k_expressionKindBinary;
 	e->val.binary.lhs = lhs;
+	e->val.binary.opera = opera;
 	e->val.binary.rhs = rhs;
 	return e;
 }
@@ -68,7 +70,14 @@ EXP *makeEXP_booleanLiteral(int boolLiteral)
 	e->val.boolLiteral = boolLiteral;
 	return e;
 }
-
+EXP *makeEXP_bracketed(EXP *exp)
+{
+	EXP *e = malloc(sizeof(EXP));
+	e->lineno = yylineno;
+	e->kind = k_expressionKindBracketed;
+	e->val.bracketed.exp = exp;
+	return e;
+}
 STATEMENT *makeSTATEMENT_assign(char *id, EXP *exp)
 {
 	STATEMENT *s = malloc(sizeof(STATEMENT));
@@ -156,6 +165,15 @@ STATEMENT *makeSTATEMENT_elseif(EXP *exp, STATEMENT *body, STATEMENT *elsestatem
 	s->val.elseifstatement.elsestatement = elsestatement;
 	return s;
 }
+
+STATEMENT *makeSTATEMENT_comment(char *id)
+{
+	STATEMENT *s = malloc(sizeof(STATEMENT));
+	s->lineno = yylineno;
+	s->kind = k_statementKindComment;
+	s->val.comment.id = id;
+	return s;
+}
 TYPE *makeTYPEbool()
 {
 	TYPE *t = malloc(sizeof(TYPE));
@@ -191,4 +209,3 @@ TYPE *makeTYPEstring()
 	t->string = "string";
 	return t;
 }
-

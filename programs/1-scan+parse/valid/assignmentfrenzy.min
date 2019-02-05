@@ -20,4 +20,3 @@ var s: string = "derp\"derp";
 while (x) {
     print(x);
 }
-// heyo
