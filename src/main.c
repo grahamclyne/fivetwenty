@@ -43,20 +43,20 @@ int main(int argc, char *argv[])
     }
     else if (strcmp("parse", argv[1]) == 0)
     {
-            yyparse();
+        yyparse();
 
         printf("OK\n");
         return 0;
     }
     else if (strcmp("pretty", argv[1]) == 0)
     {
-            yyparse();
+        yyparse();
 
         prettySTATEMENT(root);
     }
     else if (strcmp("symbol", argv[1]) == 0)
     {
-            yyparse();
+        yyparse();
 
         SymbolTable *st = initSymbolTable();
         symSTATEMENT(root, st);
@@ -64,19 +64,23 @@ int main(int argc, char *argv[])
     }
     else if (strcmp("typecheck", argv[1]) == 0)
     {
-            yyparse();
+        yyparse();
 
         SymbolTable *st = initSymbolTable();
         st->typechecked = 1;
-        symSTATEMENT(root,st);
-        typeSTATEMENT(root,st);
+        symSTATEMENT(root, st);
+        typeSTATEMENT(root, st);
         printf("OK\n");
         return 0;
     }
     else if (strcmp("codegen", argv[1]) == 0)
     {
-         yyparse();
-        if(argv[2] == NULL) {
+        yyparse();
+        SymbolTable *st = initSymbolTable();
+        symSTATEMENT(root,st);
+        typeSTATEMENT(root,st);
+        if (argv[2] == NULL)
+        {
             printf("Please input a filename after codegen.\n");
             exit(1);
         }
@@ -87,7 +91,7 @@ int main(int argc, char *argv[])
         printf("#include<stdio.h>\n");
         printf("#include<stdbool.h>\n");
         printf("int main() {\n");
-        codeSTATEMENT(root);
+        codeSTATEMENT(root,st);
         printf("}");
         fclose(fptr);
         return 0;

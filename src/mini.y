@@ -111,5 +111,4 @@ exp : tIDENTIFIER { $$ = makeEXP_identifier($1); }
 			| '!' exp %prec '!' { $$ = makeEXP_unary(k_expressionKindNot, '!',$2); }
 			| '(' exp ')'{ $$ = makeEXP_bracketed($2); }
 			;
-
 %%

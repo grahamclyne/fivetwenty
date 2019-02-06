@@ -2,11 +2,7 @@
 #include "tree.h"
 
 extern int yylineno;
-PROGRAM *makePROGRAM(STATEMENT *root)
-{
-	PROGRAM *p = malloc(sizeof(PROGRAM));
-	p->next = root;
-}
+
 EXP *makeEXP_identifier(char *identifier)
 {
 	EXP *e = malloc(sizeof(EXP));

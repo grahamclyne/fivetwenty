@@ -1,13 +1,15 @@
+#ifndef SYMBOL_H
+#define SYMBOL_H
+
+
 #include "tree.h"
 
 #define HashSize 317
 
-typedef enum {exp, type} SymbolKind;
 
 typedef struct SYMBOL {
     char *name;
     TYPE type;
- 
     struct SYMBOL *next;
 } SYMBOL; 
 
@@ -27,3 +29,6 @@ void symEXP(EXP *exp, SymbolTable *st);
 void typeSTATEMENT(STATEMENT *s, SymbolTable *st);
 TYPE *typeEXP(EXP *exp, SymbolTable *st);
 void printSymbolTable(SymbolTable *st, int depth);
+
+
+#endif
